@@ -53,6 +53,10 @@
     </Content>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\HoloDB\HoloDB.csproj">
+      <Project>{58947E8E-F25D-413D-83B6-E9E31A45104D}</Project>
+      <Name>HoloDB</Name>
+    </ProjectReference>
     <ProjectReference Include="..\HoloKernel\HoloKernel.csproj">
       <Project>{E9C9C82F-6B7C-4BC0-BF0F-D6F05D3C9DDA}</Project>
       <Name>HoloKernel</Name>

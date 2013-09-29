@@ -1,18 +1,17 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Diagnostics;
 using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Windows.Forms;
-using HoloKernel;
-using HoloKernel;
+using HoloDB;
+using HoloProcessors;
 using HoloUI.Controls;
 
 namespace HoloUI
 {
-    public partial class AudioSourcesPanel : UserControl
+    public partial class AudiosPanel : UserControl
     {
-        public AudioSourcesPanel()
+        public AudiosPanel()
         {
             InitializeComponent();
 
@@ -27,12 +26,12 @@ namespace HoloUI
         private int rowsCount;
         private int selectedItemIndex;
 
-        private AudioSources items;
+        private Audios items;
 
         private EnvelopeDrawer envelopeDrawer = new EnvelopeDrawer();
         private SamplesDrawer SamplesDrawer = new SamplesDrawer();
 
-        public void Build(AudioSources items)
+        public void Build(Audios items)
         {
             this.items = items;
             itemsPerRow = Math.Max(1, ClientSize.Width/itemWidth);
@@ -88,12 +87,12 @@ namespace HoloUI
 
         Rectangle GetEnvelopeRect(Rectangle itemBounds)
         {
-            return new Rectangle(itemBounds.Left + 22, itemBounds.Top + 18, 100, 32);
+            return new Rectangle(itemBounds.Left + 22, itemBounds.Top + 18, 64, 32);
         }
 
         Rectangle GetTempogramRect(Rectangle itemBounds)
         {
-            return new Rectangle(itemBounds.Left + 130, itemBounds.Top + 18, 100, 32);
+            return new Rectangle(itemBounds.Left + 64 + 25, itemBounds.Top + 18, 100, 32);
         }
 
         private void DrawItem(Graphics graphics, int itemIndex,  Rectangle bounds)
@@ -121,11 +120,13 @@ namespace HoloUI
             //draw icon
             graphics.DrawImage(Resource.audio_volume_medium, GetIconRect(bounds));
 
-            if (item.Envelope != null)
-                envelopeDrawer.Draw(item.Envelope, graphics, GetEnvelopeRect(bounds));
+            var envelope = item.GetData<Envelope>();
+            if (envelope != null)
+                envelopeDrawer.Draw(envelope, graphics, GetEnvelopeRect(bounds));
 
-            if (item.Tempogram != null)
-                SamplesDrawer.DrawOneSide(item.Tempogram, graphics, GetTempogramRect(bounds), true);
+            var tempogram = item.GetData<Tempogram>();
+            if (tempogram != null)
+                SamplesDrawer.DrawOneSide(tempogram.Values, graphics, GetTempogramRect(bounds), true);
         }
 
         public int PointToItemIndex(Point p)

@@ -44,7 +44,7 @@
             this.ttMain = new System.Windows.Forms.ToolTip(this.components);
             this.cmSettings = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.miRemoveShowedItems = new System.Windows.Forms.ToolStripMenuItem();
-            this.pnAudioSources = new HoloUI.AudioSourcesPanel();
+            this.pnAudios = new HoloUI.AudiosPanel();
             this.ssMain.SuspendLayout();
             this.pnTop.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pbSettings)).BeginInit();
@@ -119,6 +119,7 @@
             this.button2.TabIndex = 5;
             this.button2.Text = "button2";
             this.button2.UseVisualStyleBackColor = true;
+            this.button2.Visible = false;
             this.button2.Click += new System.EventHandler(this.button2_Click);
             // 
             // button1
@@ -129,6 +130,7 @@
             this.button1.TabIndex = 4;
             this.button1.Text = "button1";
             this.button1.UseVisualStyleBackColor = true;
+            this.button1.Visible = false;
             this.button1.Click += new System.EventHandler(this.button1_Click);
             // 
             // pbSettings
@@ -199,13 +201,13 @@
             this.miRemoveShowedItems.Text = "Remove showed items from database";
             this.miRemoveShowedItems.Click += new System.EventHandler(this.miRemoveShowedItems_Click);
             // 
-            // pnAudioSources
+            // pnAudios
             // 
-            this.pnAudioSources.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.pnAudioSources.Location = new System.Drawing.Point(0, 67);
-            this.pnAudioSources.Name = "pnAudioSources";
-            this.pnAudioSources.Size = new System.Drawing.Size(838, 389);
-            this.pnAudioSources.TabIndex = 4;
+            this.pnAudios.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.pnAudios.Location = new System.Drawing.Point(0, 67);
+            this.pnAudios.Name = "pnAudios";
+            this.pnAudios.Size = new System.Drawing.Size(838, 389);
+            this.pnAudios.TabIndex = 4;
             // 
             // MainForm
             // 
@@ -213,7 +215,7 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(838, 478);
-            this.Controls.Add(this.pnAudioSources);
+            this.Controls.Add(this.pnAudios);
             this.Controls.Add(this.pnTop);
             this.Controls.Add(this.ssMain);
             this.Name = "MainForm";
@@ -241,7 +243,7 @@
         private System.Windows.Forms.PictureBox btAddFolder;
         private System.Windows.Forms.ToolTip ttMain;
         private System.Windows.Forms.PictureBox pictureBox1;
-        private AudioSourcesPanel pnAudioSources;
+        private AudiosPanel pnAudios;
         private System.Windows.Forms.ToolStripStatusLabel lbItemCount;
         private System.Windows.Forms.ToolStripProgressBar pbProgress;
         private System.Windows.Forms.PictureBox pbSettings;

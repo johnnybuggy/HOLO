@@ -5,11 +5,11 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProductVersion>8.0.30703</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{E9C9C82F-6B7C-4BC0-BF0F-D6F05D3C9DDA}</ProjectGuid>
+    <ProjectGuid>{58947E8E-F25D-413D-83B6-E9E31A45104D}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>HoloKernel</RootNamespace>
-    <AssemblyName>HoloKernel</AssemblyName>
+    <RootNamespace>HoloDB</RootNamespace>
+    <AssemblyName>HoloDB</AssemblyName>
     <TargetFrameworkVersion>v2.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
@@ -21,7 +21,6 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -37,22 +36,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AudioProcessor.cs" />
-    <Compile Include="Interfaces\IAudioProcessor.cs" />
-    <Compile Include="Factory.cs" />
-    <Compile Include="Helpers\AudioFileScanner.cs" />
-    <Compile Include="Interfaces\IAudioDecoder.cs" />
-    <Compile Include="Interfaces\IResampler.cs" />
-    <Compile Include="Interfaces\ISampleProcessor.cs" />
+    <Compile Include="Audio.cs" />
+    <Compile Include="Audios.cs" />
+    <Compile Include="DB.cs" />
+    <Compile Include="IStorable.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Helpers\Resampler.cs" />
-    <Compile Include="Samples.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\HoloDB\HoloDB.csproj">
-      <Project>{58947E8E-F25D-413D-83B6-E9E31A45104D}</Project>
-      <Name>HoloDB</Name>
-    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

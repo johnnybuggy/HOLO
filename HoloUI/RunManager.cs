@@ -5,6 +5,8 @@ using System.Reflection;
 using System.Text;
 using System.Windows.Forms;
 using HoloKernel;
+using HoloDB;
+using HoloProcessors;
 
 namespace HoloUI
 {
@@ -27,11 +29,29 @@ namespace HoloUI
             //magic
             typeof(Form).GetField("defaultIcon", BindingFlags.NonPublic | BindingFlags.Static).SetValue(null, Resource.HOLO_ico);
 
+
             //load database
-            DB = DB.Load(DBPath);
+            try
+            {
+                DB = DB.Load(DBPath, GetWellKnownTypes());
+            }catch(Exception ex)
+            {
+                MessageBox.Show(ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                DB = new DB();
+            }
 
             //init factory
             Factory = new DefaultFactory();
+        }
+
+        private static Dictionary<int, Type> GetWellKnownTypes()
+        {
+            var res = new Dictionary<int, Type>();
+
+            res.Add(0, typeof (Envelope));
+            res.Add(1, typeof (Tempogram));
+
+            return res;
         }
 
         public static void OnCloseApplication(CloseAppplicationEventArgs e)

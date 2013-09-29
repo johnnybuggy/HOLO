@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace HoloKernel
+namespace HoloProcessors
 {
     /// <summary>    
     /// Represent a class that performs real or complex valued Fast Fourier                                      

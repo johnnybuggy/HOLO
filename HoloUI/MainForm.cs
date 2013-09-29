@@ -8,8 +8,10 @@ using System.IO;
 using System.Text;
 using System.Threading;
 using System.Windows.Forms;
+using HoloDB;
 using HoloKernel;
 using HoloKernel;
+using HoloProcessors;
 
 namespace HoloUI
 {
@@ -31,7 +33,7 @@ namespace HoloUI
             tmProcessing.Stop();
             try
             {
-                ProcessAudioSources();
+                ProcessAudios();
             }catch(Exception ex)
             {
                 //ignore
@@ -40,13 +42,13 @@ namespace HoloUI
             tmProcessing.Start();
         }
 
-        private void ProcessAudioSources()
+        private void ProcessAudios()
         {
             //find unprocessed items
-            var list = new List<AudioSource>();
-            lock (RunManager.DB.AudioSources)
-                foreach (var item in RunManager.DB.AudioSources)
-                    if(item.State == AudioSourceState.Unprocessed)
+            var list = new List<Audio>();
+            lock (RunManager.DB.Audios)
+                foreach (var item in RunManager.DB.Audios)
+                    if(item.State == AudioState.Unprocessed)
                         list.Add(item);
 
             var processor = RunManager.Factory.CreateAudioProcessor();
@@ -58,7 +60,7 @@ namespace HoloUI
                                                                          pbProgress.Value = e.ProgressPercentage;
                                                                          lbProgress.Text = "Processed: " +e.ProgressPercentage + "%";
                                                                          ssMain.Refresh();
-                                                                         pnAudioSources.Refresh();
+                                                                         pnAudios.Refresh();
                                                                      }));
             processor.Process(list);
         }
@@ -97,15 +99,15 @@ namespace HoloUI
                 UpdateAddedCountLabel(counter);
 
                 Dictionary<string, int> dict;
-                lock (RunManager.DB.AudioSources)
-                    dict = RunManager.DB.AudioSources.GetIndexesByFullPath();
+                lock (RunManager.DB.Audios)
+                    dict = RunManager.DB.Audios.GetIndexesByFullPath();
 
                 foreach (var path in AudioFileScanner.Scan(pathes))
                 if(!dict.ContainsKey(path))
                 {
-                    var item = new AudioSource() {FullPath = path};
-                    lock (RunManager.DB.AudioSources)
-                        RunManager.DB.AudioSources.Add(item);
+                    var item = new Audio() {FullPath = path};
+                    lock (RunManager.DB.Audios)
+                        RunManager.DB.Audios.Add(item);
                     RunManager.DB.IsChanged = true;
                     counter++;
                     if (counter%7 == 0)
@@ -161,8 +163,8 @@ namespace HoloUI
                 return;
             }
 
-            showedItems = new AudioSources(RunManager.DB.AudioSources);//temp !!!!!
-            pnAudioSources.Build(showedItems);
+            showedItems = new Audios(RunManager.DB.Audios);//temp !!!!!
+            pnAudios.Build(showedItems);
             lbItemCount.Text = "Items: " + showedItems.Count;
             Invalidate(true);
         }
@@ -177,14 +179,14 @@ namespace HoloUI
             RemoveShowedItems();
         }
 
-        private AudioSources showedItems;
+        private Audios showedItems;
 
         private void RemoveShowedItems()
         {
             try
             {
-                lock (RunManager.DB.AudioSources)
-                   RunManager.DB.AudioSources.RemoveRange(showedItems);
+                lock (RunManager.DB.Audios)
+                   RunManager.DB.Audios.RemoveRange(showedItems);
                 RunManager.DB.IsChanged = true;
 
                 Build();
@@ -216,41 +218,41 @@ namespace HoloUI
             var factory = new DefaultFactory();
             var decoder = factory.CreateAudioDecoder();
             //decode audio source to samples and mp3 tags extracting
-            AudioSourceInfo info;
-            AudioSource item = null;
+            AudioInfo info;
+            Audio item = null;
 
-            //item = new AudioSource() { FullPath = @"E:\Music\Classic music\Bah-Badinerie---Muzykal_naya-shutka-Syuita--2-si-minor-dlya-fleyty-s-orkestrom(muzofon.com).mp3" };
+            //item = new Audio() { FullPath = @"E:\Music\Classic music\Bah-Badinerie---Muzykal_naya-shutka-Syuita--2-si-minor-dlya-fleyty-s-orkestrom(muzofon.com).mp3" };
             //BuildTempogramm(decoder, item);
-            //item = new AudioSource() { FullPath = @"E:\Music\Classic music\bach_-_orchestral_suite_no._2_in_b_minor_badinerie_(zaycev.net).mp3" };
+            //item = new Audio() { FullPath = @"E:\Music\Classic music\bach_-_orchestral_suite_no._2_in_b_minor_badinerie_(zaycev.net).mp3" };
             //BuildTempogramm(decoder, item);
-            //item = new AudioSource() { FullPath = @"E:\Music\Classic music\17-Bach.SuiteNo2-Badinerie.mp3" };
+            //item = new Audio() { FullPath = @"E:\Music\Classic music\17-Bach.SuiteNo2-Badinerie.mp3" };
             //BuildTempogramm(decoder, item);
 
-            item = new AudioSource() { FullPath = @"E:\Music\Classic music\bach_-_toccata_(zaycev.net).mp3" };
+            item = new Audio() { FullPath = @"E:\Music\Classic music\bach_-_toccata_(zaycev.net).mp3" };
             BuildTempogramm(decoder, item);
 
             
 
-            //var item = new AudioSource() { FullPath = @"E:\Music\Ambient\Mushroomer_Surface.mp3" };
-            //var item = new AudioSource() { FullPath = @"E:\Music\Nightwish\Nightwish - 05 The Phantom of the Opera (End of An Era) Live.mp3" };
-            //var item = new AudioSource() { FullPath = @"E:\Music\Classic music\150 любимых мелодий\cd4\13_-_'K_Elize'_-Ljudvig_Vai_Bethoven.mp3" };
-            //var item = new AudioSource() { FullPath = @"E:\Music\Classic music\150 любимых мелодий\cd4\06_-_'Polet_Shmelja'_Iz_Opery_'Skazka_O_Care_Saltane'_-Nikolaj_Rimskij-Korsakov.mp3" };
-            //item = new AudioSource() { FullPath = @"E:\Music\Ambient\Mushroomer_Triton_Lair.mp3" };
+            //var item = new Audio() { FullPath = @"E:\Music\Ambient\Mushroomer_Surface.mp3" };
+            //var item = new Audio() { FullPath = @"E:\Music\Nightwish\Nightwish - 05 The Phantom of the Opera (End of An Era) Live.mp3" };
+            //var item = new Audio() { FullPath = @"E:\Music\Classic music\150 любимых мелодий\cd4\13_-_'K_Elize'_-Ljudvig_Vai_Bethoven.mp3" };
+            //var item = new Audio() { FullPath = @"E:\Music\Classic music\150 любимых мелодий\cd4\06_-_'Polet_Shmelja'_Iz_Opery_'Skazka_O_Care_Saltane'_-Nikolaj_Rimskij-Korsakov.mp3" };
+            //item = new Audio() { FullPath = @"E:\Music\Ambient\Mushroomer_Triton_Lair.mp3" };
             //BuildTempogramm(decoder, item);
-            //item = new AudioSource() { FullPath = @"E:\Music\Ambient\Mushroomer_Ima_tower.mp3" };
+            //item = new Audio() { FullPath = @"E:\Music\Ambient\Mushroomer_Ima_tower.mp3" };
             //BuildTempogramm(decoder, item);
-            //item = new AudioSource() { FullPath = @"C:\Mushroomer_Ima_tower_1.wav"};
+            //item = new Audio() { FullPath = @"C:\Mushroomer_Ima_tower_1.wav"};
             //BuildTempogramm(decoder, item);
-            //item = new AudioSource() { FullPath = @"c:\temp.wav" };
+            //item = new Audio() { FullPath = @"c:\temp.wav" };
             //BuildTempogramm(decoder, item);
-            //item = new AudioSource() { FullPath = @"c:\Solar_Wind_frag.wav" };
+            //item = new Audio() { FullPath = @"c:\Solar_Wind_frag.wav" };
             //BuildTempogramm(decoder, item);
-            //item = new AudioSource() { FullPath = @"E:\Music\Classic music\ChiMai.mp3" };
+            //item = new Audio() { FullPath = @"E:\Music\Classic music\ChiMai.mp3" };
             //BuildTempogramm(decoder, item);
-            //item = new AudioSource() { FullPath = @"E:\Music\Classic music\ElPadrino.mp3" };
+            //item = new Audio() { FullPath = @"E:\Music\Classic music\ElPadrino.mp3" };
             //BuildTempogramm(decoder, item);
 
-            //item = new AudioSource() { FullPath = @"E:\Music\Classic music\CockeyesSong.mp3" };
+            //item = new Audio() { FullPath = @"E:\Music\Classic music\CockeyesSong.mp3" };
             //BuildTempogramm(decoder, item);
 
             
@@ -258,21 +260,21 @@ namespace HoloUI
             
             
 
-            //item = new AudioSource() { FullPath = @"E:\Music\Oomph!\2001 - Ego\08 - Serotonin.mp3" };
+            //item = new Audio() { FullPath = @"E:\Music\Oomph!\2001 - Ego\08 - Serotonin.mp3" };
             //BuildTempogramm(decoder, item);
 
-            //item = new AudioSource() { FullPath = @"C:\1hz.wav"};
+            //item = new Audio() { FullPath = @"C:\1hz.wav"};
             //BuildTempogramm(decoder, item);
 
-            //item = new AudioSource() { FullPath = @"C:\0.5hz.wav" };
+            //item = new Audio() { FullPath = @"C:\0.5hz.wav" };
             //BuildTempogramm(decoder, item);
 
             decoder.Dispose();
         }
 
-        private static void BuildTempogramm(IAudioDecoder decoder, AudioSource item)
+        private static void BuildTempogramm(IAudioDecoder decoder, Audio item)
         {
-            AudioSourceInfo info;
+            AudioInfo info;
             using (var stream = item.GetSourceStream())
                 info = decoder.Decode(stream, 1000, item.GetSourceExtension());
 
@@ -285,8 +287,8 @@ namespace HoloUI
             //ToCSV(values);
 
             //build amplitude envelope
-            var eb = new EnvelopeBuilder();
-            var s = eb.BuildEnvelope(info.Samples, 32);
+            var eb = new EnvelopeBuilder(RunManager.Factory);
+            var s = eb.Build(info.Samples, 32);
             values = s.Values;
 
 

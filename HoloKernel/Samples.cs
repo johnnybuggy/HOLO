@@ -1,10 +1,20 @@
 using System;
+using HoloDB;
 
 namespace HoloKernel
 {
+    /// <summary>
+    /// Sample values of sound and his bitrate
+    /// </summary>
     public class Samples : IStorable
     {
+        /// <summary>
+        /// Samples of sound
+        /// </summary>
         public float[] Values;
+        /// <summary>
+        /// Bitrate (samples per second)
+        /// </summary>
         public float Bitrate;
 
         /// <summary>
@@ -71,7 +81,7 @@ namespace HoloKernel
 
         public void Store(System.IO.BinaryWriter bw)
         {
-            bw.Write((byte)0);
+            bw.Write((byte)0);//version
             bw.Write(Bitrate);
             if (Values == null || Values.Length == 0)
                 bw.Write((int) 0);

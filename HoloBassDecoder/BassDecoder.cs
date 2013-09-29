@@ -23,7 +23,7 @@ namespace HoloBassDecoder
                 throw new Exception("Bass_Init error!");
         }
 
-        public AudioSourceInfo Decode(System.IO.Stream stream, float targetBitrate, string fileExt)
+        public AudioInfo Decode(System.IO.Stream stream, float targetBitrate, string fileExt)
         {
             var length = stream.Length;
             byte[] source = new byte[length];
@@ -36,7 +36,7 @@ namespace HoloBassDecoder
             {
                 var buffer = ReadMonoFromStream(_hGCFile.AddrOfPinnedObject(), source.Length, (int) targetBitrate, -1, 0);
 
-                var result = new AudioSourceInfo();
+                var result = new AudioInfo();
                 result.Samples = new Samples() { Values = buffer, Bitrate = (int)targetBitrate };
                 return result;
             }

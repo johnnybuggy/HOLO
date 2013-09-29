@@ -1,9 +1,9 @@
 ﻿using System.IO;
 
-namespace HoloKernel
+namespace HoloDB
 {
     /// <summary>
-    /// Can save himself into stream
+    /// Can save/load himself into/from stream
     /// </summary>
     public interface IStorable
     {

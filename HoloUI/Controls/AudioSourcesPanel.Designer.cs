@@ -1,6 +1,6 @@
 ﻿namespace HoloUI
 {
-    partial class AudioSourcesPanel
+    partial class AudiosPanel
     {
         /// <summary> 
         /// Required designer variable.
@@ -49,11 +49,11 @@
             this.miPlay.Text = "Play";
             this.miPlay.Click += new System.EventHandler(this.miPlay_Click);
             // 
-            // AudioSourcesPanel
+            // AudiosPanel
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.Name = "AudioSourcesPanel";
+            this.Name = "AudiosPanel";
             this.Size = new System.Drawing.Size(461, 343);
             this.cmMain.ResumeLayout(false);
             this.ResumeLayout(false);

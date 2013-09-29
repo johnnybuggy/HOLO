@@ -7,16 +7,16 @@ namespace HoloKernel
 {
     public interface IAudioDecoder : IDisposable
     {
-        AudioSourceInfo Decode(Stream stream, float targetBitrate, string fileExt);
+        AudioInfo Decode(Stream stream, float targetBitrate, string fileExt);
         bool AllowsMultithreading { get; }
     }
 
-    public class AudioSourceInfo
+    public class AudioInfo
     {
         public Samples Samples { get; set; }
         public Dictionary<string, object> Tags { get; private set; }
 
-        public AudioSourceInfo()
+        public AudioInfo()
         {
             Tags = new Dictionary<string, object>();
         }
