@@ -31,9 +31,12 @@
             this.components = new System.ComponentModel.Container();
             this.ssMain = new System.Windows.Forms.StatusStrip();
             this.lbItemCount = new System.Windows.Forms.ToolStripStatusLabel();
+            this.lbAddedCount = new System.Windows.Forms.ToolStripStatusLabel();
             this.lbProgress = new System.Windows.Forms.ToolStripStatusLabel();
             this.pbProgress = new System.Windows.Forms.ToolStripProgressBar();
             this.pnTop = new System.Windows.Forms.Panel();
+            this.button2 = new System.Windows.Forms.Button();
+            this.button1 = new System.Windows.Forms.Button();
             this.pbSettings = new System.Windows.Forms.PictureBox();
             this.label1 = new System.Windows.Forms.Label();
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
@@ -41,7 +44,6 @@
             this.ttMain = new System.Windows.Forms.ToolTip(this.components);
             this.cmSettings = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.miRemoveShowedItems = new System.Windows.Forms.ToolStripMenuItem();
-            this.lbAddedCount = new System.Windows.Forms.ToolStripStatusLabel();
             this.pnAudioSources = new HoloUI.AudioSourcesPanel();
             this.ssMain.SuspendLayout();
             this.pnTop.SuspendLayout();
@@ -72,6 +74,13 @@
             this.lbItemCount.Text = "Items: 0";
             this.lbItemCount.ToolTipText = "Items count";
             // 
+            // lbAddedCount
+            // 
+            this.lbAddedCount.Name = "lbAddedCount";
+            this.lbAddedCount.Size = new System.Drawing.Size(54, 17);
+            this.lbAddedCount.Text = "Added: 0";
+            this.lbAddedCount.Visible = false;
+            // 
             // lbProgress
             // 
             this.lbProgress.Name = "lbProgress";
@@ -90,6 +99,8 @@
             // 
             this.pnTop.BackgroundImage = global::HoloUI.Resource.bgTop;
             this.pnTop.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.pnTop.Controls.Add(this.button2);
+            this.pnTop.Controls.Add(this.button1);
             this.pnTop.Controls.Add(this.pbSettings);
             this.pnTop.Controls.Add(this.label1);
             this.pnTop.Controls.Add(this.pictureBox1);
@@ -99,6 +110,26 @@
             this.pnTop.Name = "pnTop";
             this.pnTop.Size = new System.Drawing.Size(838, 67);
             this.pnTop.TabIndex = 3;
+            // 
+            // button2
+            // 
+            this.button2.Location = new System.Drawing.Point(286, 10);
+            this.button2.Name = "button2";
+            this.button2.Size = new System.Drawing.Size(75, 23);
+            this.button2.TabIndex = 5;
+            this.button2.Text = "button2";
+            this.button2.UseVisualStyleBackColor = true;
+            this.button2.Click += new System.EventHandler(this.button2_Click);
+            // 
+            // button1
+            // 
+            this.button1.Location = new System.Drawing.Point(182, 10);
+            this.button1.Name = "button1";
+            this.button1.Size = new System.Drawing.Size(75, 23);
+            this.button1.TabIndex = 4;
+            this.button1.Text = "button1";
+            this.button1.UseVisualStyleBackColor = true;
+            this.button1.Click += new System.EventHandler(this.button1_Click);
             // 
             // pbSettings
             // 
@@ -168,13 +199,6 @@
             this.miRemoveShowedItems.Text = "Remove showed items from database";
             this.miRemoveShowedItems.Click += new System.EventHandler(this.miRemoveShowedItems_Click);
             // 
-            // lbAddedCount
-            // 
-            this.lbAddedCount.Name = "lbAddedCount";
-            this.lbAddedCount.Size = new System.Drawing.Size(54, 17);
-            this.lbAddedCount.Text = "Added: 0";
-            this.lbAddedCount.Visible = false;
-            // 
             // pnAudioSources
             // 
             this.pnAudioSources.Dock = System.Windows.Forms.DockStyle.Fill;
@@ -225,6 +249,8 @@
         private System.Windows.Forms.ToolStripMenuItem miRemoveShowedItems;
         private System.Windows.Forms.ToolStripStatusLabel lbProgress;
         private System.Windows.Forms.ToolStripStatusLabel lbAddedCount;
+        private System.Windows.Forms.Button button1;
+        private System.Windows.Forms.Button button2;
 
     }
 }

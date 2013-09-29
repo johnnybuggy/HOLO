@@ -74,6 +74,10 @@ namespace HoloKernel
         /// </summary>
         public virtual byte[] Envelope { get;set;}
 
+        public float NotesPerSecond { get; set; }
+
+        public Samples Tempogram { get;set;}
+
         public virtual void Store(BinaryWriter bw)
         {
             bw.Write((byte)0);//version
@@ -86,6 +90,9 @@ namespace HoloKernel
                 bw.Write((ushort) Envelope.Length);
                 bw.Write(Envelope, 0, Envelope.Length);
             }
+
+            bw.Write(NotesPerSecond);
+            Tempogram.Store(bw);
         }
 
         public virtual void Load(BinaryReader br)
@@ -96,6 +103,10 @@ namespace HoloKernel
             var count = br.ReadUInt16();
             if(count > 0)
                 Envelope = br.ReadBytes(count);
+
+            NotesPerSecond = br.ReadSingle();
+            Tempogram = new Samples();
+            Tempogram.Load(br);
         }
 
         public virtual Stream GetSourceStream()

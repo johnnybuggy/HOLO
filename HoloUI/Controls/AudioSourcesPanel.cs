@@ -30,6 +30,7 @@ namespace HoloUI
         private AudioSources items;
 
         private EnvelopeDrawer envelopeDrawer = new EnvelopeDrawer();
+        private SamplesDrawer SamplesDrawer = new SamplesDrawer();
 
         public void Build(AudioSources items)
         {
@@ -87,7 +88,12 @@ namespace HoloUI
 
         Rectangle GetEnvelopeRect(Rectangle itemBounds)
         {
-            return new Rectangle(itemBounds.Left + 22, itemBounds.Top + 18, 128, 32);
+            return new Rectangle(itemBounds.Left + 22, itemBounds.Top + 18, 100, 32);
+        }
+
+        Rectangle GetTempogramRect(Rectangle itemBounds)
+        {
+            return new Rectangle(itemBounds.Left + 130, itemBounds.Top + 18, 100, 32);
         }
 
         private void DrawItem(Graphics graphics, int itemIndex,  Rectangle bounds)
@@ -116,7 +122,10 @@ namespace HoloUI
             graphics.DrawImage(Resource.audio_volume_medium, GetIconRect(bounds));
 
             if (item.Envelope != null)
-                envelopeDrawer.DrawEnvelope(item.Envelope, graphics, GetEnvelopeRect(bounds));
+                envelopeDrawer.Draw(item.Envelope, graphics, GetEnvelopeRect(bounds));
+
+            if (item.Tempogram != null)
+                SamplesDrawer.DrawOneSide(item.Tempogram, graphics, GetTempogramRect(bounds), true);
         }
 
         public int PointToItemIndex(Point p)

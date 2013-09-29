@@ -48,6 +48,7 @@
     <Compile Include="Controls\AudioSourcesPanel.Designer.cs">
       <DependentUpon>AudioSourcesPanel.cs</DependentUpon>
     </Compile>
+    <Compile Include="Controls\SamplesDrawer.cs" />
     <Compile Include="Controls\EnvelopeDrawer.cs" />
     <Compile Include="Controls\SelectFolderForm.cs">
       <SubType>Form</SubType>
@@ -108,7 +109,7 @@
       <Project>{7B70E195-7999-4435-91FD-AB1D288ED885}</Project>
       <Name>HoloBassDecoder</Name>
     </ProjectReference>
-    <ProjectReference Include="..\HoloDB\HoloKernel.csproj">
+    <ProjectReference Include="..\HoloKernel\HoloKernel.csproj">
       <Project>{E9C9C82F-6B7C-4BC0-BF0F-D6F05D3C9DDA}</Project>
       <Name>HoloKernel</Name>
     </ProjectReference>

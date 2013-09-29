@@ -1,6 +1,8 @@
+using System;
+
 namespace HoloKernel
 {
-    public class Samples
+    public class Samples : IStorable
     {
         public float[] Values;
         public float Bitrate;
@@ -24,9 +26,9 @@ namespace HoloKernel
         }
 
         /// <summary>
-        /// Normalizes amplitude to 1
+        /// Normalizes amplitude (by default from -1 to +1)
         /// </summary>
-        unsafe public void Normalize()
+        unsafe public void Normalize(float k = 1f)
         {
             var l = Values.Length;
 
@@ -46,7 +48,7 @@ namespace HoloKernel
 
             //normalize
             if (max > float.Epsilon)
-                Scale(1/max);
+                Scale(k/max);
         }
 
         /// <summary>
@@ -65,6 +67,40 @@ namespace HoloKernel
                     ptr++;
                 }
             }
+        }
+
+        public void Store(System.IO.BinaryWriter bw)
+        {
+            bw.Write((byte)0);
+            bw.Write(Bitrate);
+            if (Values == null || Values.Length == 0)
+                bw.Write((int) 0);
+            else
+            {
+                bw.Write((int)Values.Length);
+                foreach (var v in Values)
+                    bw.Write(v);
+            }
+        }
+
+        public void Load(System.IO.BinaryReader br)
+        {
+            br.ReadByte();//version
+            Bitrate = br.ReadSingle();
+            var count = br.ReadInt32();
+            Values = new float[count];
+            for (int i = 0; i < count; i++)
+                Values[i] = br.ReadSingle();
+        }
+
+        public Samples Clone()
+        {
+            var result = new Samples();
+            result.Bitrate = Bitrate;
+            result.Values = new float[Values.Length];
+            Array.Copy(Values, result.Values, Values.Length);
+
+            return result;
         }
     }
 }

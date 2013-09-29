@@ -15,7 +15,7 @@ namespace HoloKernel
             AudioSources = new AudioSources();
         }
 
-        public void Save(string fullPath)
+        public virtual void Save(string fullPath)
         {
             var tempFullPath = fullPath + ".temp";
 

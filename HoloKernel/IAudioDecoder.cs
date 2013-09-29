@@ -5,7 +5,7 @@ using System.Text;
 
 namespace HoloKernel
 {
-    public interface IAudioDecoder
+    public interface IAudioDecoder : IDisposable
     {
         AudioSourceInfo Decode(Stream stream, float targetBitrate, string fileExt);
         bool AllowsMultithreading { get; }

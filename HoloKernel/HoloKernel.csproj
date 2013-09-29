@@ -41,6 +41,7 @@
     <Compile Include="DB\AudioSource.cs" />
     <Compile Include="DB\DB.cs" />
     <Compile Include="DB\IStorable.cs" />
+    <Compile Include="FFT.cs" />
     <Compile Include="IAudioProcessor.cs" />
     <Compile Include="Factory.cs" />
     <Compile Include="FileScanner.cs" />

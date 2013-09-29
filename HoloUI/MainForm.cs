@@ -2,7 +2,9 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
+using System.Diagnostics;
 using System.Drawing;
+using System.IO;
 using System.Text;
 using System.Threading;
 using System.Windows.Forms;
@@ -162,6 +164,7 @@ namespace HoloUI
             showedItems = new AudioSources(RunManager.DB.AudioSources);//temp !!!!!
             pnAudioSources.Build(showedItems);
             lbItemCount.Text = "Items: " + showedItems.Count;
+            Invalidate(true);
         }
 
         private void pbSettings_Click(object sender, EventArgs e)
@@ -190,6 +193,194 @@ namespace HoloUI
             {
                 ShowError(ex);
             }
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            var fft = new FFTCalculator();
+            var data = new float[] {1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0};
+            Out(data);
+            fft.RealFFT(data, true);
+            data = fft.Norm(data);
+            Out(data);
+        }
+
+        private static void Out(float[] data)
+        {
+            Console.WriteLine();
+            foreach (var v in data) Console.Write(v.ToString("0.00") + "\t");
+        }
+
+        private void button2_Click(object sender, EventArgs e)
+        {
+            var factory = new DefaultFactory();
+            var decoder = factory.CreateAudioDecoder();
+            //decode audio source to samples and mp3 tags extracting
+            AudioSourceInfo info;
+            AudioSource item = null;
+
+            //item = new AudioSource() { FullPath = @"E:\Music\Classic music\Bah-Badinerie---Muzykal_naya-shutka-Syuita--2-si-minor-dlya-fleyty-s-orkestrom(muzofon.com).mp3" };
+            //BuildTempogramm(decoder, item);
+            //item = new AudioSource() { FullPath = @"E:\Music\Classic music\bach_-_orchestral_suite_no._2_in_b_minor_badinerie_(zaycev.net).mp3" };
+            //BuildTempogramm(decoder, item);
+            //item = new AudioSource() { FullPath = @"E:\Music\Classic music\17-Bach.SuiteNo2-Badinerie.mp3" };
+            //BuildTempogramm(decoder, item);
+
+            item = new AudioSource() { FullPath = @"E:\Music\Classic music\bach_-_toccata_(zaycev.net).mp3" };
+            BuildTempogramm(decoder, item);
+
+            
+
+            //var item = new AudioSource() { FullPath = @"E:\Music\Ambient\Mushroomer_Surface.mp3" };
+            //var item = new AudioSource() { FullPath = @"E:\Music\Nightwish\Nightwish - 05 The Phantom of the Opera (End of An Era) Live.mp3" };
+            //var item = new AudioSource() { FullPath = @"E:\Music\Classic music\150 любимых мелодий\cd4\13_-_'K_Elize'_-Ljudvig_Vai_Bethoven.mp3" };
+            //var item = new AudioSource() { FullPath = @"E:\Music\Classic music\150 любимых мелодий\cd4\06_-_'Polet_Shmelja'_Iz_Opery_'Skazka_O_Care_Saltane'_-Nikolaj_Rimskij-Korsakov.mp3" };
+            //item = new AudioSource() { FullPath = @"E:\Music\Ambient\Mushroomer_Triton_Lair.mp3" };
+            //BuildTempogramm(decoder, item);
+            //item = new AudioSource() { FullPath = @"E:\Music\Ambient\Mushroomer_Ima_tower.mp3" };
+            //BuildTempogramm(decoder, item);
+            //item = new AudioSource() { FullPath = @"C:\Mushroomer_Ima_tower_1.wav"};
+            //BuildTempogramm(decoder, item);
+            //item = new AudioSource() { FullPath = @"c:\temp.wav" };
+            //BuildTempogramm(decoder, item);
+            //item = new AudioSource() { FullPath = @"c:\Solar_Wind_frag.wav" };
+            //BuildTempogramm(decoder, item);
+            //item = new AudioSource() { FullPath = @"E:\Music\Classic music\ChiMai.mp3" };
+            //BuildTempogramm(decoder, item);
+            //item = new AudioSource() { FullPath = @"E:\Music\Classic music\ElPadrino.mp3" };
+            //BuildTempogramm(decoder, item);
+
+            //item = new AudioSource() { FullPath = @"E:\Music\Classic music\CockeyesSong.mp3" };
+            //BuildTempogramm(decoder, item);
+
+            
+            
+            
+            
+
+            //item = new AudioSource() { FullPath = @"E:\Music\Oomph!\2001 - Ego\08 - Serotonin.mp3" };
+            //BuildTempogramm(decoder, item);
+
+            //item = new AudioSource() { FullPath = @"C:\1hz.wav"};
+            //BuildTempogramm(decoder, item);
+
+            //item = new AudioSource() { FullPath = @"C:\0.5hz.wav" };
+            //BuildTempogramm(decoder, item);
+
+            decoder.Dispose();
+        }
+
+        private static void BuildTempogramm(IAudioDecoder decoder, AudioSource item)
+        {
+            AudioSourceInfo info;
+            using (var stream = item.GetSourceStream())
+                info = decoder.Decode(stream, 1000, item.GetSourceExtension());
+
+            info.Samples.Normalize();
+
+            var values = info.Samples.Values;
+
+            
+
+            //ToCSV(values);
+
+            //build amplitude envelope
+            var eb = new EnvelopeBuilder();
+            var s = eb.BuildEnvelope(info.Samples, 32);
+            values = s.Values;
+
+
+            //ToCSV(values);
+
+            //diff
+            var diff = new float[values.Length - 10];
+            for (int i = 0; i < diff.Length; i++)
+            {
+                var v = values[i + 1] - values[i];
+                if (v > 0)
+                    diff[i] = v;
+            }
+
+            values = diff;
+            ToCSV(values);
+
+            //var s = new Samples() {Bitrate = 1};
+            //var values = s.Values = new float[32] { 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0};
+           // var values = s.Values = new float[32] { 1, 0, 1, 0, 0, 1, 0, 1, 0, 0, 1, 0, 1, 0, 0, 1, 0, 1, 0, 0, 1, 0, 1, 0, 0, 1, 0, 1, 0, 0, 1, 0 };
+            
+            var maxShift = (int) (16*s.Bitrate);
+            var autoCorr = AutoCorr(values, maxShift, 4);
+            //values = autoCorr;
+            ToCSVWithX(autoCorr, 1 / s.Bitrate);
+
+            //autoCorr = AutoCorr(autoCorr, maxShift / 3);
+            //ToCSVWithX(autoCorr, 1 / s.Bitrate);
+
+            /*
+            var newSize = (int)Math.Pow(2, (int)Math.Log(values.Length, 2));
+            var arr = new float[newSize];
+            Array.Copy(values, arr, newSize);
+            values = arr;
+
+            new FFTCalculator().RealFFT(values, true);
+            values = new FFTCalculator().Norm(values);
+            //Array.Reverse(values);
+            ToCSVWithX(values, 1/s.Bitrate);*/
+        }
+
+        private static float[] AutoCorr(float[] values, int maxShift, int pow = 2)
+        {
+            float[] autoCorr = new float[maxShift - 1];
+            var l = values.Length;
+
+
+            for (int shift = 1; shift < maxShift; shift++)
+            {
+                var sum = 0f;
+                for (int i = 0; i < values.Length - (pow - 1)* shift; i++)
+                {
+                    var v = values[i];
+
+                    for (int p = 1; p < pow; p++)
+                    {
+                        var ii = i + p * shift;
+                        /*if(ii >= l) 
+                        {
+                            v = 0; 
+                            break;
+                        }*/
+                        v *= values[ii];
+                    }
+
+                    sum += v;
+                }
+                autoCorr[shift - 1] = sum;
+            }
+            return autoCorr;
+        }
+
+        private static void ToCSV(float[] array)
+        {
+            var sb = new StringBuilder();
+            foreach (var v in array)
+                sb.AppendLine(v.ToString("0.000"));
+            var temp = Path.GetTempFileName() + ".csv";
+            File.WriteAllText(temp, sb.ToString());
+            Process.Start(temp);
+        }
+
+        private static void ToCSVWithX(float[] array, float stepX = 1, float startX = 0)
+        {
+            var x = startX;
+            var sb = new StringBuilder();
+            foreach (var v in array)
+            {
+                sb.AppendLine(x.ToString("0.00") +";" + v.ToString("0.000"));
+                x += stepX;
+            }
+            var temp = Path.GetTempFileName() + ".csv";
+            File.WriteAllText(temp, sb.ToString());
+            Process.Start(temp);
         }
     }
 }

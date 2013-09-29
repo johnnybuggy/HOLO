@@ -64,16 +64,21 @@ namespace HoloKernel
 
         private void ProcessMultithreading(IAudioDecoder decoder)
         {
+            var threads = new List<Thread>();
             //create threads
             var threadCount = Environment.ProcessorCount;
             for(int i = 0;i<threadCount;i++)
             {
                 var t = new Thread(() => Process(decoder)) {IsBackground = true};
                 t.Start();
+                threads.Add(t);
             }
 
             while (sourceQueue.Count > 0)
                 Thread.Sleep(100);
+
+            foreach (var t in threads)
+                t.Join();
         }
 
         private void Process(IAudioDecoder decoder)
@@ -89,7 +94,9 @@ namespace HoloKernel
                 using (var stream = item.GetSourceStream())
                     info = decoder.Decode(stream, TargetBitrate, item.GetSourceExtension());
 
+                info.Samples.Normalize();
                 BuildEnvelope(item, info, EnvelopeLength);
+                BuildTempogram(item, info);
 
                 OnProgress(new ProgressChangedEventArgs(100 * (itemsCount - sourceQueue.Count) / itemsCount, null));
                 item.State = AudioSourceState.Processed;
@@ -118,7 +125,6 @@ namespace HoloKernel
             var s = eb.BuildEnvelope(info.Samples);
             //resample
             var resampled = factory.CreateResampler().Resample(s, info.Samples.Bitrate * ((float)envelopeLength / info.Samples.Values.Length));
-            resampled.Normalize();
             var values = resampled.Values;
             //pack
             var packed = new byte[values.Length / 2];
@@ -132,6 +138,68 @@ namespace HoloKernel
             }
 
             item.Envelope = packed;
+        }
+
+        public virtual void BuildTempogram(AudioSource item, AudioSourceInfo info)
+        {
+            var values = info.Samples.Values;
+
+            //build amplitude envelope
+            var eb = new EnvelopeBuilder();
+            var s = eb.BuildEnvelope(info.Samples, 32);
+            values = s.Values;
+
+            //diff
+            var diff = new float[values.Length - 10];
+            for (int i = 0; i < diff.Length; i++)
+            {
+                var v = values[i + 1] - values[i];
+                if (v > 0)
+                    diff[i] = v;
+            }
+
+            values = diff;
+
+            //count of notes per second
+            var count = 0;
+            foreach(var v in values)
+            if(v > 0.2f)
+                count++;
+
+            var time = values.Length/s.Bitrate;
+            item.NotesPerSecond = count/time;
+
+            var sec = 4;
+            var maxShift = (int) (sec*s.Bitrate);
+            values = AutoCorr(values, maxShift, 4);
+
+            var tempogram = new Samples() {Bitrate = s.Bitrate, Values = values};
+            tempogram = new Resampler().Resample(tempogram, 16 * values.Length / (s.Bitrate * sec));
+
+            item.Tempogram = tempogram;
+        }
+
+        protected virtual float[] AutoCorr(float[] values, int maxShift, int pow = 2)
+        {
+            float[] autoCorr = new float[maxShift - 1];
+            var l = values.Length;
+
+
+            for (int shift = 1; shift < maxShift; shift++)
+            {
+                var sum = 0f;
+                for (int i = 0; i < values.Length - (pow - 1)* shift; i++)
+                {
+                    var v = values[i];
+
+                    for (int p = 1; p < pow; p++)
+                        v *= values[i + p * shift];
+
+                    sum += v;
+                }
+                autoCorr[shift - 1] = sum;
+            }
+            return autoCorr;
         }
     }
 }
