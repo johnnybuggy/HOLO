@@ -42,6 +42,10 @@
     <Compile Include="Factory.cs" />
     <Compile Include="Helpers\AudioFileScanner.cs" />
     <Compile Include="Interfaces\IAudioDecoder.cs" />
+    <Compile Include="Interfaces\ICompareDescriptor.cs" />
+    <Compile Include="Interfaces\ITextDescriptor.cs" />
+    <Compile Include="Interfaces\IDistanceDescriptor.cs" />
+    <Compile Include="Interfaces\INamed.cs" />
     <Compile Include="Interfaces\IResampler.cs" />
     <Compile Include="Interfaces\ISampleProcessor.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

@@ -31,15 +31,21 @@
             this.components = new System.ComponentModel.Container();
             this.cmMain = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.miPlay = new System.Windows.Forms.ToolStripMenuItem();
+            this.findSimilarByToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.miVolumeDistr = new System.Windows.Forms.ToolStripMenuItem();
+            this.tempoDistributionToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.sortByTempoToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.cmMain.SuspendLayout();
             this.SuspendLayout();
             // 
             // cmMain
             // 
             this.cmMain.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.miPlay});
+            this.miPlay,
+            this.findSimilarByToolStripMenuItem,
+            this.sortByTempoToolStripMenuItem});
             this.cmMain.Name = "cmMain";
-            this.cmMain.Size = new System.Drawing.Size(153, 48);
+            this.cmMain.Size = new System.Drawing.Size(153, 92);
             // 
             // miPlay
             // 
@@ -48,6 +54,36 @@
             this.miPlay.Size = new System.Drawing.Size(152, 22);
             this.miPlay.Text = "Play";
             this.miPlay.Click += new System.EventHandler(this.miPlay_Click);
+            // 
+            // findSimilarByToolStripMenuItem
+            // 
+            this.findSimilarByToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.miVolumeDistr,
+            this.tempoDistributionToolStripMenuItem});
+            this.findSimilarByToolStripMenuItem.Name = "findSimilarByToolStripMenuItem";
+            this.findSimilarByToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.findSimilarByToolStripMenuItem.Text = "Find similar by";
+            // 
+            // miVolumeDistr
+            // 
+            this.miVolumeDistr.Name = "miVolumeDistr";
+            this.miVolumeDistr.Size = new System.Drawing.Size(179, 22);
+            this.miVolumeDistr.Text = "Volume distribution";
+            this.miVolumeDistr.Click += new System.EventHandler(this.miVolumeDistr_Click);
+            // 
+            // tempoDistributionToolStripMenuItem
+            // 
+            this.tempoDistributionToolStripMenuItem.Name = "tempoDistributionToolStripMenuItem";
+            this.tempoDistributionToolStripMenuItem.Size = new System.Drawing.Size(179, 22);
+            this.tempoDistributionToolStripMenuItem.Text = "Tempo distribution";
+            this.tempoDistributionToolStripMenuItem.Click += new System.EventHandler(this.tempoDistributionToolStripMenuItem_Click);
+            // 
+            // sortByTempoToolStripMenuItem
+            // 
+            this.sortByTempoToolStripMenuItem.Name = "sortByTempoToolStripMenuItem";
+            this.sortByTempoToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.sortByTempoToolStripMenuItem.Text = "Sort by Tempo";
+            this.sortByTempoToolStripMenuItem.Click += new System.EventHandler(this.sortByTempoToolStripMenuItem_Click);
             // 
             // AudiosPanel
             // 
@@ -64,5 +100,9 @@
 
         private System.Windows.Forms.ContextMenuStrip cmMain;
         private System.Windows.Forms.ToolStripMenuItem miPlay;
+        private System.Windows.Forms.ToolStripMenuItem findSimilarByToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem miVolumeDistr;
+        private System.Windows.Forms.ToolStripMenuItem tempoDistributionToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem sortByTempoToolStripMenuItem;
     }
 }

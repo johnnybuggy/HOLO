@@ -22,17 +22,18 @@ namespace HoloProcessors
         /// <summary>
         /// Amplitude envelope builder
         /// </summary>
-        public Samples Build(Samples source, int targetBitrate = 20)
+        public Samples Build(Samples source, int targetBitrate = 20, bool differentiate = false) 
         {
             float k = 1f * targetBitrate /source.Bitrate;
             var values = source.Values;
             var resValues = new float[(int)(values.Length * k)+1];
 
-            for (int i = values.Length - 1; i >= 0; i--)
+            for (int i = values.Length - 2; i >= 0; i--)
             {
                 var ii = (int) (i*k);
                 var prev = resValues[ii];
                 var f = values[i];
+                if (differentiate) f = values[i + 1] - f;
                 if(f < 0) f = -f;
 
                 if (prev < f) resValues[ii] = f;
@@ -52,6 +53,12 @@ namespace HoloProcessors
             var envelope = new Envelope(resampled);
             //save into audio item
             item.Data.Add(envelope);
+
+            //build volumeDescriptor
+            var volDesc = new VolumeDescriptor();
+            volDesc.Build(s.Values);
+
+            item.Data.Add(volDesc);
         }
     }
 }

@@ -48,6 +48,7 @@
     <Compile Include="Controls\AudioSourcesPanel.Designer.cs">
       <DependentUpon>AudioSourcesPanel.cs</DependentUpon>
     </Compile>
+    <Compile Include="Controls\CDFDrawer.cs" />
     <Compile Include="Controls\SamplesDrawer.cs" />
     <Compile Include="Controls\EnvelopeDrawer.cs" />
     <Compile Include="Controls\SelectFolderForm.cs">

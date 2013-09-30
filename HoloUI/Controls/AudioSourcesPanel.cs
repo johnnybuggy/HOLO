@@ -11,11 +11,22 @@ namespace HoloUI
 {
     public partial class AudiosPanel : UserControl
     {
+        private Font SmallFont;
+        private Font SmallestFont;
+
         public AudiosPanel()
         {
             InitializeComponent();
 
             SetStyle( ControlStyles.AllPaintingInWmPaint | ControlStyles.OptimizedDoubleBuffer | ControlStyles.UserPaint, true);
+        }
+
+        protected override void OnLoad(EventArgs e)
+        {
+            base.OnLoad(e);
+
+            SmallFont = new Font("SmallFont", Font.Size - 1);
+            SmallestFont = new Font("SmallFont", Font.Size - 2);
         }
 
         private const int itemWidth = 250;
@@ -30,6 +41,7 @@ namespace HoloUI
 
         private EnvelopeDrawer envelopeDrawer = new EnvelopeDrawer();
         private SamplesDrawer SamplesDrawer = new SamplesDrawer();
+        private CDFDrawer cdfDrawer = new CDFDrawer();
 
         public void Build(Audios items)
         {
@@ -90,9 +102,19 @@ namespace HoloUI
             return new Rectangle(itemBounds.Left + 22, itemBounds.Top + 18, 64, 32);
         }
 
+        Rectangle GetVolumeDescRect(Rectangle itemBounds)
+        {
+            return new Rectangle(itemBounds.Left + 22, itemBounds.Top + 18 + 35, 32, 32);
+        }
+
         Rectangle GetTempogramRect(Rectangle itemBounds)
         {
-            return new Rectangle(itemBounds.Left + 64 + 25, itemBounds.Top + 18, 100, 32);
+            return new Rectangle(itemBounds.Left + 64 + 25, itemBounds.Top + 18, 63, 32);
+        }
+
+        Rectangle GetTempoRect(Rectangle itemBounds)
+        {
+            return new Rectangle(itemBounds.Left + 64 + 25 + 65, itemBounds.Top + 18, 50, 35);
         }
 
         private void DrawItem(Graphics graphics, int itemIndex,  Rectangle bounds)
@@ -101,7 +123,7 @@ namespace HoloUI
                 return;
             var item = items[itemIndex];
             var color1 = Color.White;
-            var color2 = Color.Silver;
+            var color2 = Color.FromArgb(210, 210, 210);
 
             if (itemIndex == selectedItemIndex)
                 color2 = Color.Orange;
@@ -126,7 +148,20 @@ namespace HoloUI
 
             var tempogram = item.GetData<Tempogram>();
             if (tempogram != null)
-                SamplesDrawer.DrawOneSide(tempogram.Values, graphics, GetTempogramRect(bounds), true);
+            {
+                cdfDrawer.Draw(tempogram, graphics, GetTempogramRect(bounds), true);
+
+                using (var brush = new SolidBrush(ForeColor))
+                {
+                    var sf = new StringFormat() {Trimming = StringTrimming.None};
+                    graphics.DrawString(tempogram.Description, SmallFont, brush, GetTempoRect(bounds), sf);
+                }
+            }
+
+            var volumeDescriptor = item.GetData<VolumeDescriptor>();
+            if (volumeDescriptor != null)
+                cdfDrawer.Draw(volumeDescriptor, graphics, GetVolumeDescRect(bounds));
+
         }
 
         public int PointToItemIndex(Point p)
@@ -137,9 +172,13 @@ namespace HoloUI
             return (p.Y + VerticalScroll.Value)/itemHeight * itemsPerRow  + j;
         }
 
+        private Point clickMousePoint;
+
         protected override void OnMouseDown(MouseEventArgs e)
         {
             base.OnMouseDown(e);
+
+            clickMousePoint = e.Location;
 
             var index = PointToItemIndex(e.Location);
             if (index != selectedItemIndex)
@@ -161,6 +200,7 @@ namespace HoloUI
         {
             base.OnMouseMove(e);
             if(Control.MouseButtons == System.Windows.Forms.MouseButtons.Left)
+            if(Math.Abs(clickMousePoint.X - e.Location.X) + Math.Abs(clickMousePoint.Y - e.Location.Y) > 3)
             {
                 if (selectedItemIndex < 0 || selectedItemIndex >= items.Count)
                     return;
@@ -178,6 +218,102 @@ namespace HoloUI
                     return;
                 var item = items[selectedItemIndex];
                 Process.Start(item.FullPath);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        private void miVolumeDistr_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                if(selectedItemIndex < 0 || selectedItemIndex >= items.Count)
+                    return;
+                var item = items[selectedItemIndex];
+                var desc = item.GetData<VolumeDescriptor>();
+                if(desc != null)
+                foreach (var i in items)
+                {
+                    var d = i.GetData<VolumeDescriptor>();
+                    if(d == null)
+                    {
+                        i.Tag = 10;
+                        continue;
+                    }
+                    i.Tag = d.Distance(desc);
+                }
+
+                items.Sort((a1, a2) => a1.Tag.CompareTo(a2.Tag));
+
+                ScrollToTopLeft();
+                selectedItemIndex = 0;
+                Invalidate();
+            }catch(Exception ex)
+            {
+                MessageBox.Show(ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        private void tempoDistributionToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (selectedItemIndex < 0 || selectedItemIndex >= items.Count)
+                return;
+            try
+            {
+                var item = items[selectedItemIndex];
+                var desc = item.GetData<Tempogram>();
+                if(desc != null)
+                foreach (var i in items)
+                {
+                    var d = i.GetData<Tempogram>();
+                    if (d == null)
+                    {
+                        i.Tag = 10;
+                        continue;
+                    }
+                    var d1 = desc.Distance(d);
+                    var d2 = Math.Abs(desc.Tempo - d.Tempo);
+                    i.Tag = d1 + d2 * 0.5f;
+                }
+
+                items.Sort((a1, a2) => a1.Tag.CompareTo(a2.Tag));
+
+                ScrollToTopLeft();
+                selectedItemIndex = 0;
+                Invalidate();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        void ScrollToTopLeft()
+        {
+            HorizontalScroll.Value = 0;
+            VerticalScroll.Value = 0;
+            AutoScrollMinSize += new Size(1, 1);
+            AutoScrollMinSize -= new Size(1, 1);   
+        }
+
+        private void sortByTempoToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                items.Sort(
+                    (a1, a2) =>
+                    {
+                        var t1 = a1.GetData<Tempogram>();
+                        var t2 = a2.GetData<Tempogram>();
+                        if (t1 != null && t2 != null)
+                            return t1.Tempo.CompareTo(t2.Tempo);
+                        else
+                            return a1.ShortName.CompareTo(a2.ShortName);
+                    }
+                    );
+                Invalidate();
             }
             catch (Exception ex)
             {

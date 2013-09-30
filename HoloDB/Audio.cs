@@ -32,6 +32,11 @@ namespace HoloDB
         /// </summary>
         public List<IStorable> Data { get; protected set; }
 
+        /// <summary>
+        /// Service user tag (this object is not saving in database)
+        /// </summary>
+        public float Tag { get; set; }
+
         public Audio()
         {
             Data = new List<IStorable>();

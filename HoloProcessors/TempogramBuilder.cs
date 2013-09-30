@@ -22,7 +22,7 @@ namespace HoloProcessors
 
             //build amplitude envelope
             var eb = new EnvelopeBuilder(factory);
-            var s = eb.Build(info.Samples, 32);
+            var s = eb.Build(info.Samples, 32, true);
             values = s.Values;
 
             //diff
@@ -43,16 +43,29 @@ namespace HoloProcessors
                     count++;
 
             var time = values.Length / s.Bitrate;//time of sound
-            tempogram.NotesPerSecond = count / time;
+            tempogram.Tempo = count / time;
 
-            var sec = 4;
+            var sec = 5;//4
             var maxShift = (int)(sec * s.Bitrate);
-            values = AutoCorr(values, maxShift, 4);
+            values = AutoCorr(values, maxShift, 10);//4
+            /*
+            var max = 0f;
+            foreach (var v in values)
+                if (v > max)
+                    max = v;*/
 
             var tempogramValues = new Samples() { Bitrate = s.Bitrate, Values = values };
             tempogramValues = new Resampler().Resample(tempogramValues, 16 * values.Length / (s.Bitrate * sec));
 
-            tempogram.Values = tempogramValues;
+            var list = new List<KeyValuePair<float, float>>();
+            for (int i = 0; i < tempogramValues.Values.Length; i++)
+            {
+                var j = 1f*i/tempogramValues.Values.Length;
+                list.Add(new KeyValuePair<float, float>((float)j, tempogramValues.Values[i]));
+            }
+
+            tempogram.Build(list);
+            //tempogram.RhythmLevel = max;
 
             //save to audio item
             item.Data.Add(tempogram);
@@ -67,7 +80,8 @@ namespace HoloProcessors
             for (int shift = 1; shift < maxShift; shift++)
             {
                 var sum = 0f;
-                for (int i = 0; i < values.Length - (pow - 1) * shift; i++)
+                var count = values.Length - (pow - 1)*shift;
+                for (int i = 0; i < count; i++)
                 {
                     var v = values[i];
 

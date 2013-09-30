@@ -25,6 +25,20 @@ namespace HoloUI
             yield return new EnvelopeBuilder(this);
             //build tempogram
             yield return new TempogramBuilder(this);
+            //
+            yield return new SimpleDescriptorsBuilder();
+        }
+
+        public static Dictionary<int, Type> GetWellKnownTypes()
+        {
+            var res = new Dictionary<int, Type>();
+
+            res.Add(0, typeof(Envelope));
+            res.Add(1, typeof(Tempogram));
+            res.Add(2, typeof(VolumeDescriptor));
+            res.Add(3, typeof(SpectrumDescriptor));
+
+            return res;
         }
     }
 }
