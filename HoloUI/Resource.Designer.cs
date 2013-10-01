@@ -60,6 +60,13 @@ namespace HoloUI {
             }
         }
         
+        internal static System.Drawing.Bitmap _1375954379_edit_find {
+            get {
+                object obj = ResourceManager.GetObject("1375954379_edit-find", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
         internal static System.Drawing.Bitmap audio_volume_medium {
             get {
                 object obj = ResourceManager.GetObject("audio_volume_medium", resourceCulture);
@@ -105,6 +112,13 @@ namespace HoloUI {
         internal static System.Drawing.Bitmap play {
             get {
                 object obj = ResourceManager.GetObject("play", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap search {
+            get {
+                object obj = ResourceManager.GetObject("search", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

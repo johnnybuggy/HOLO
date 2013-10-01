@@ -32,6 +32,11 @@ namespace HoloDB
         /// </summary>
         public List<IStorable> Data { get; protected set; }
 
+        /// <summary>
+        /// Service user tag (this object is not saving in database)
+        /// </summary>
+        public float Tag { get; set; }
+
         public Audio()
         {
             Data = new List<IStorable>();
@@ -71,7 +76,7 @@ namespace HoloDB
 
         public virtual Stream GetSourceStream()
         {
-            return File.Open(FullPath, FileMode.Open, FileAccess.Read);
+            return File.Open(FullPath, FileMode.Open, FileAccess.Read, FileShare.Read);
         }
 
         public virtual string GetSourceExtension()

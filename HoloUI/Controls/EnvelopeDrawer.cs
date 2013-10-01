@@ -24,6 +24,9 @@ namespace HoloUI.Controls
                 var y = envelope[i] * ky;
                 gr.DrawLine(pen, cx + x, cy + y, cx + x, cy - y);
             }
+
+            using (var pen = new Pen(ForeColor))
+                gr.DrawLine(pen, cx, cy, cx + bounds.Width, cy);
         }
     }
 }
