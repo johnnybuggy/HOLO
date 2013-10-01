@@ -4,7 +4,7 @@ using System.Text;
 
 namespace HoloProcessors
 {
-    public class SpectrumDescriptor : CDF
+    public class SpectrumDescriptor : Histogram
     {
     }
 }

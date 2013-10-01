@@ -31,10 +31,13 @@
             this.components = new System.ComponentModel.Container();
             this.cmMain = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.miPlay = new System.Windows.Forms.ToolStripMenuItem();
-            this.findSimilarByToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.miVolumeDistr = new System.Windows.Forms.ToolStripMenuItem();
-            this.tempoDistributionToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.findSimilarsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.sortByTempoToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.sortByRhythmToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.sortByNameToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripMenuItem1 = new System.Windows.Forms.ToolStripSeparator();
+            this.miDebug = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripMenuItem2 = new System.Windows.Forms.ToolStripSeparator();
             this.cmMain.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -42,48 +45,68 @@
             // 
             this.cmMain.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.miPlay,
-            this.findSimilarByToolStripMenuItem,
-            this.sortByTempoToolStripMenuItem});
+            this.findSimilarsToolStripMenuItem,
+            this.toolStripMenuItem2,
+            this.sortByTempoToolStripMenuItem,
+            this.sortByRhythmToolStripMenuItem,
+            this.sortByNameToolStripMenuItem,
+            this.toolStripMenuItem1,
+            this.miDebug});
             this.cmMain.Name = "cmMain";
-            this.cmMain.Size = new System.Drawing.Size(153, 92);
+            this.cmMain.Size = new System.Drawing.Size(160, 170);
             // 
             // miPlay
             // 
             this.miPlay.Image = global::HoloUI.Resource.play;
             this.miPlay.Name = "miPlay";
-            this.miPlay.Size = new System.Drawing.Size(152, 22);
+            this.miPlay.Size = new System.Drawing.Size(159, 22);
             this.miPlay.Text = "Play";
             this.miPlay.Click += new System.EventHandler(this.miPlay_Click);
             // 
-            // findSimilarByToolStripMenuItem
+            // findSimilarsToolStripMenuItem
             // 
-            this.findSimilarByToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.miVolumeDistr,
-            this.tempoDistributionToolStripMenuItem});
-            this.findSimilarByToolStripMenuItem.Name = "findSimilarByToolStripMenuItem";
-            this.findSimilarByToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
-            this.findSimilarByToolStripMenuItem.Text = "Find similar by";
-            // 
-            // miVolumeDistr
-            // 
-            this.miVolumeDistr.Name = "miVolumeDistr";
-            this.miVolumeDistr.Size = new System.Drawing.Size(179, 22);
-            this.miVolumeDistr.Text = "Volume distribution";
-            this.miVolumeDistr.Click += new System.EventHandler(this.miVolumeDistr_Click);
-            // 
-            // tempoDistributionToolStripMenuItem
-            // 
-            this.tempoDistributionToolStripMenuItem.Name = "tempoDistributionToolStripMenuItem";
-            this.tempoDistributionToolStripMenuItem.Size = new System.Drawing.Size(179, 22);
-            this.tempoDistributionToolStripMenuItem.Text = "Tempo distribution";
-            this.tempoDistributionToolStripMenuItem.Click += new System.EventHandler(this.tempoDistributionToolStripMenuItem_Click);
+            this.findSimilarsToolStripMenuItem.Name = "findSimilarsToolStripMenuItem";
+            this.findSimilarsToolStripMenuItem.Size = new System.Drawing.Size(159, 22);
+            this.findSimilarsToolStripMenuItem.Text = "Find similars";
+            this.findSimilarsToolStripMenuItem.Click += new System.EventHandler(this.findSimilarsToolStripMenuItem_Click);
             // 
             // sortByTempoToolStripMenuItem
             // 
             this.sortByTempoToolStripMenuItem.Name = "sortByTempoToolStripMenuItem";
-            this.sortByTempoToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
-            this.sortByTempoToolStripMenuItem.Text = "Sort by Tempo";
+            this.sortByTempoToolStripMenuItem.Size = new System.Drawing.Size(159, 22);
+            this.sortByTempoToolStripMenuItem.Text = "Sort by Intensity";
             this.sortByTempoToolStripMenuItem.Click += new System.EventHandler(this.sortByTempoToolStripMenuItem_Click);
+            // 
+            // sortByRhythmToolStripMenuItem
+            // 
+            this.sortByRhythmToolStripMenuItem.Name = "sortByRhythmToolStripMenuItem";
+            this.sortByRhythmToolStripMenuItem.Size = new System.Drawing.Size(159, 22);
+            this.sortByRhythmToolStripMenuItem.Text = "Sort by Rhythm";
+            this.sortByRhythmToolStripMenuItem.Click += new System.EventHandler(this.sortByRhythmToolStripMenuItem_Click);
+            // 
+            // sortByNameToolStripMenuItem
+            // 
+            this.sortByNameToolStripMenuItem.Name = "sortByNameToolStripMenuItem";
+            this.sortByNameToolStripMenuItem.Size = new System.Drawing.Size(159, 22);
+            this.sortByNameToolStripMenuItem.Text = "Sort by Name";
+            this.sortByNameToolStripMenuItem.Click += new System.EventHandler(this.sortByNameToolStripMenuItem_Click);
+            // 
+            // toolStripMenuItem1
+            // 
+            this.toolStripMenuItem1.Name = "toolStripMenuItem1";
+            this.toolStripMenuItem1.Size = new System.Drawing.Size(156, 6);
+            // 
+            // miDebug
+            // 
+            this.miDebug.Name = "miDebug";
+            this.miDebug.Size = new System.Drawing.Size(159, 22);
+            this.miDebug.Text = "Debug";
+            this.miDebug.Click += new System.EventHandler(this.miDebug_Click);
+            // 
+            // toolStripMenuItem2
+            // 
+            this.toolStripMenuItem2.Name = "toolStripMenuItem2";
+            this.toolStripMenuItem2.Size = new System.Drawing.Size(156, 6);
             // 
             // AudiosPanel
             // 
@@ -100,9 +123,12 @@
 
         private System.Windows.Forms.ContextMenuStrip cmMain;
         private System.Windows.Forms.ToolStripMenuItem miPlay;
-        private System.Windows.Forms.ToolStripMenuItem findSimilarByToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem miVolumeDistr;
-        private System.Windows.Forms.ToolStripMenuItem tempoDistributionToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem sortByTempoToolStripMenuItem;
+        private System.Windows.Forms.ToolStripSeparator toolStripMenuItem1;
+        private System.Windows.Forms.ToolStripMenuItem miDebug;
+        private System.Windows.Forms.ToolStripMenuItem sortByRhythmToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem findSimilarsToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem sortByNameToolStripMenuItem;
+        private System.Windows.Forms.ToolStripSeparator toolStripMenuItem2;
     }
 }

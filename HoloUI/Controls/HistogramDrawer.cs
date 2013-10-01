@@ -10,7 +10,7 @@ namespace HoloUI
     {
         public Color ForeColor = Color.Silver;
 
-        public void Draw(CDF cdf, Graphics gr, Rectangle bounds, bool differential = true)
+        public void Draw(Histogram hist, Graphics gr, Rectangle bounds)
         {
             var w = bounds.Width;
             var kx = 1f / bounds.Width;
@@ -18,22 +18,24 @@ namespace HoloUI
             var cy = bounds.Top + bounds.Height;
             var cx = bounds.Left;
 
-            var diffs = new List<float>();
-            var maxDiff = 0f;
-            if(differential)
+            var ddd = hist[1f];
+
+            var max = 0f;
+
             for (float i = 0; i <= 1; i += 1f / w)
             {
-                var d = cdf[i + 1f/w] - cdf[i];
-                diffs.Add(d);
-                if (d > maxDiff)
-                    maxDiff = d;
+                var v = hist[i];
+                if (v > max)
+                    max = v;
             }
+
+            ky = bounds.Height / max;
 
             using (var pen = new Pen(ForeColor))
                 for (float i = 0; i <= 1; i += 1f/w)
                 {
                     var x = i * w;
-                    var y = (differential ? (diffs[(int)x]  / maxDiff) : cdf[i]) * ky;
+                    var y = hist[i] * ky;
                     gr.DrawLine(pen, cx + x, cy, cx + x, cy - y);
                 }
 

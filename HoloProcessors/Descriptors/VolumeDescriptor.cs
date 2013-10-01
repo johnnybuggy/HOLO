@@ -4,7 +4,7 @@ using System.Text;
 
 namespace HoloProcessors
 {
-    public class VolumeDescriptor : CDF
+    public class VolumeDescriptor : Histogram
     {
     }
 }

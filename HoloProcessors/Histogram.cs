@@ -9,16 +9,16 @@ namespace HoloProcessors
     /// <summary>
     /// Cumulative distribution function
     /// </summary>
-    public class CDF : IStorable, IDistanceDescriptor
+    public class Histogram : IStorable, IDistanceDescriptor
     {
         private const int defaultSize = 16;
         private byte[] values;
 
-        public CDF() : this(defaultSize)
+        public Histogram() : this(defaultSize)
         {
         }
 
-        public CDF(int size)
+        public Histogram(int size)
         {
             values = new byte[size];
         }
@@ -29,10 +29,9 @@ namespace HoloProcessors
         }
 
         /// <summary>
-        /// Returns value for any point (with linear interpolation).
+        /// Returns frequency value.
         /// Index must by from 0 to 1
         /// </summary>
-        /// <param name="index"></param>
         /// <returns>Value from 0 to 1</returns>
         public virtual float this[float index]
         {
@@ -41,16 +40,12 @@ namespace HoloProcessors
                 var size = Size;
                 index = index*size;
                 var intIndex = (int)index;
-                if (index <= float.Epsilon) return 0f;
-                if (index >= size) return 1f;
+                if (index < 0) return 0f;
+                if (intIndex > size) return 0f;
 
-                float v1 = values[intIndex];
-                float v2 = 255;
-                if(intIndex < size - 1) v2 = values[intIndex + 1];
-
-                float rest = index - intIndex;
-
-                return ((1 - rest) * v1 + rest * v2)/255f;//linear interpolation
+                float v1 = intIndex > 0 ? values[intIndex - 1] : 0;
+                float v2 = intIndex == size ? 255 : values[intIndex];
+                return (v2 - v1)/255f;
             }
         }
 
@@ -91,7 +86,7 @@ namespace HoloProcessors
                 frequencies[intIndex] += pair.Value;
                 sum += pair.Value;
             }
-
+            //calc cumulative
             double cum = 0.0;
             var s = Size;
             if (sum > float.Epsilon)
@@ -121,10 +116,10 @@ namespace HoloProcessors
 
         public float Distance(IDistanceDescriptor other)
         {
-            return Distance((CDF) other);
+            return Distance((Histogram) other);
         }
 
-        public float Distance(CDF other)
+        public float Distance(Histogram other)
         {
             if (other == null)
                 return 1;

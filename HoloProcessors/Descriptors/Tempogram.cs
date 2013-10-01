@@ -10,49 +10,88 @@ namespace HoloProcessors
     /// <summary>
     /// Describes tempo of sound
     /// </summary>
-    public class Tempogram : CDF, ITextDescriptor, ICompareDescriptor
+    public class Tempogram : ITextDescriptor, ICompareDescriptor, IStorable
     {
         private const int size = 32;
-        /// <summary>
-        /// Tempo (Hz)
-        /// </summary>
-        public float Tempo { get; internal set; }
 
         /// <summary>
-        /// Rhythm level (power of Rhythm of sound)
+        /// Describes main rithm
         /// </summary>
-        public float RhythmLevel { get; internal set; }
+        public Histogram LongTempogram { get; private set; }
 
-        public Tempogram():base(size)
-        {   
+        /// <summary>
+        /// Describes autocorrelation (short rithm)
+        /// </summary>
+        public Histogram ShortTempogram { get; private set; }
+
+        /// <summary>
+        /// Intensity (Hz), frequency of rithmical sounds
+        /// </summary>
+        public float Intensity { get; internal set; }
+
+        /// <summary>
+        /// Main rhythm (sec)
+        /// </summary>
+        public float LongRhythm { get; internal set; }
+
+        /// <summary>
+        /// Main rhythm level
+        /// </summary>
+        public float LongRhythmLevel { get; internal set; }
+
+        public Tempogram()
+        {
+            LongTempogram = new Histogram(size);
+            ShortTempogram = new Histogram(size);
         }
 
-        public override void Store(BinaryWriter bw)
+        public void Store(BinaryWriter bw)
         {
             bw.Write((byte) 0);//version
-            bw.Write(Tempo);
-            bw.Write(RhythmLevel);
-            base.Store(bw);
+            bw.Write(Intensity);
+            bw.Write(LongRhythm);
+            bw.Write(LongRhythmLevel);
+            LongTempogram.Store(bw);
+            ShortTempogram.Store(bw);
         }
 
-        public override void Load(BinaryReader br)
+        public void Load(BinaryReader br)
         {
             br.ReadByte();//version
-            Tempo = br.ReadSingle();
-            RhythmLevel = br.ReadSingle();
-            base.Load(br);
+            Intensity = br.ReadSingle();
+            LongRhythm = br.ReadSingle();
+            LongRhythmLevel = br.ReadSingle();
+            LongTempogram.Load(br);
+            ShortTempogram.Load(br);
+        }
+
+        public bool LongRhythmIsValid
+        {
+            get { return LongRhythmLevel > 0.2f && !float.IsPositiveInfinity(LongRhythm); }
         }
 
         public string Description
         {
             //get { return string.Format("Tmp {0:N2} Lvl {1:.000}", Tempo, RhythmLevel); }
-            get { return string.Format("Tmp {0:N2}", Tempo); }
+            get
+            {
+                if (LongRhythmIsValid)
+                    return string.Format("Ints {0:N2} Rtm {1:N1}", Intensity, LongRhythm);
+                else
+                    return string.Format("Ints {0:N2}", Intensity);
+            }
         }
 
         public int Compare(ICompareDescriptor other)
         {
             if (other == null) return 1;
-            return Tempo.CompareTo((other as Tempogram).Tempo);
+            return Intensity.CompareTo((other as Tempogram).Intensity);
+        }
+
+
+        public float Weight
+        {
+            get { return LongRhythmIsValid ? 1f : 0.1f; }
         }
     }
 }

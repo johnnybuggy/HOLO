@@ -76,7 +76,7 @@ namespace HoloDB
 
         public virtual Stream GetSourceStream()
         {
-            return File.Open(FullPath, FileMode.Open, FileAccess.Read);
+            return File.Open(FullPath, FileMode.Open, FileAccess.Read, FileShare.Read);
         }
 
         public virtual string GetSourceExtension()

@@ -1,9 +1,11 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Windows.Forms;
 using HoloDB;
+using HoloKernel;
 using HoloProcessors;
 using HoloUI.Controls;
 
@@ -13,6 +15,7 @@ namespace HoloUI
     {
         private Font SmallFont;
         private Font SmallestFont;
+        private FindSimilarPropertiesForm findSimilarPropertiesForm = new FindSimilarPropertiesForm();
 
         public AudiosPanel()
         {
@@ -112,6 +115,11 @@ namespace HoloUI
             return new Rectangle(itemBounds.Left + 64 + 25, itemBounds.Top + 18, 63, 32);
         }
 
+        Rectangle GetShortTempogramRect(Rectangle itemBounds)
+        {
+            return new Rectangle(itemBounds.Left + 64 + 25, itemBounds.Top + 18 + 35, 63, 32);
+        }
+
         Rectangle GetTempoRect(Rectangle itemBounds)
         {
             return new Rectangle(itemBounds.Left + 64 + 25 + 65, itemBounds.Top + 18, 50, 35);
@@ -149,7 +157,8 @@ namespace HoloUI
             var tempogram = item.GetData<Tempogram>();
             if (tempogram != null)
             {
-                cdfDrawer.Draw(tempogram, graphics, GetTempogramRect(bounds), true);
+                cdfDrawer.Draw(tempogram.LongTempogram, graphics, GetTempogramRect(bounds));
+                cdfDrawer.Draw(tempogram.ShortTempogram, graphics, GetShortTempogramRect(bounds));
 
                 using (var brush = new SolidBrush(ForeColor))
                 {
@@ -273,9 +282,10 @@ namespace HoloUI
                         i.Tag = 10;
                         continue;
                     }
-                    var d1 = desc.Distance(d);
-                    var d2 = Math.Abs(desc.Tempo - d.Tempo);
-                    i.Tag = d1 + d2 * 0.5f;
+                    var d1 = desc.LongTempogram.Distance(d.LongTempogram);
+                    var d2 = desc.ShortTempogram.Distance(d.ShortTempogram);
+                    var d3 = Math.Abs(desc.Intensity - d.Intensity);
+                    i.Tag = d1 + d2 * 0.0003f + d3 * 0.0002f;
                 }
 
                 items.Sort((a1, a2) => a1.Tag.CompareTo(a2.Tag));
@@ -308,10 +318,131 @@ namespace HoloUI
                         var t1 = a1.GetData<Tempogram>();
                         var t2 = a2.GetData<Tempogram>();
                         if (t1 != null && t2 != null)
-                            return t1.Tempo.CompareTo(t2.Tempo);
+                            return t1.Intensity.CompareTo(t2.Intensity);
                         else
                             return a1.ShortName.CompareTo(a2.ShortName);
                     }
+                    );
+                Invalidate();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        private void miDebug_Click(object sender, EventArgs e)
+        {
+            if (selectedItemIndex < 0 || selectedItemIndex >= items.Count)
+                return;
+            try
+            {
+                var item = items[selectedItemIndex];
+
+                //new Tester(RunManager.Factory).Process(item);
+
+                Invalidate();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        private void sortByRhythmToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                items.Sort(
+                        (a1, a2) =>
+                        {
+                            var t1 = a1.GetData<Tempogram>();
+                            var t2 = a2.GetData<Tempogram>();
+                            if (t1 != null && t2 != null && t1.LongRhythmIsValid && t2.LongRhythmIsValid)
+                                return t1.LongRhythm.CompareTo(t2.LongRhythm);
+                            if (t1 == null && t2 != null) return 1;
+                            if (t2 == null && t1 != null) return -1;
+                            if (t1 == t2) return 0;
+                            if (t1.LongRhythmIsValid && !t2.LongRhythmIsValid) return -1;
+                            if (t2.LongRhythmIsValid && !t1.LongRhythmIsValid) return 1;
+
+                            return 0;
+                        }
+                    );
+                Invalidate();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        private void findSimilarsToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (selectedItemIndex < 0 || selectedItemIndex >= items.Count)
+                return;
+            try
+            {
+                var item = items[selectedItemIndex];
+
+                if (findSimilarPropertiesForm.ShowDialog() != DialogResult.OK)
+                    return;
+
+                var cbAmpEnvelope = findSimilarPropertiesForm.cbAmpEnvelope.Checked;
+                var cbIntensity = findSimilarPropertiesForm.cbIntensity.Checked;
+                var cbLongRhythm = findSimilarPropertiesForm.cbLongRhythm.Checked;
+                var cbShortRhythm = findSimilarPropertiesForm.cbShortRhythm.Checked;
+                var cbVolumeDistr = findSimilarPropertiesForm.cbVolumeDistr.Checked;
+
+                var tempogram = item.GetData<Tempogram>();
+                var volumeDescr = item.GetData<VolumeDescriptor>();
+
+                foreach (var i in items)
+                {
+                    var distance = 0f;
+                    var d = i.GetData<Tempogram>();
+                    if (d == null || tempogram == null)
+                        distance += 1;
+                    else
+                    {
+                        if (cbLongRhythm) distance += tempogram.LongTempogram.Distance(d.LongTempogram);
+                        if (cbShortRhythm) distance += tempogram.ShortTempogram.Distance(d.ShortTempogram) * 0.3f;
+                        if (cbIntensity) distance += Math.Abs(tempogram.Intensity - d.Intensity) * 0.2f;
+                    }
+
+                    if(cbVolumeDistr)
+                    {
+                        var vd = i.GetData<VolumeDescriptor>();
+                        if (vd == null || volumeDescr == null)
+                            distance += 1f;
+                        else
+                            distance += volumeDescr.Distance(vd);
+                    }
+
+                    i.Tag = distance;
+                }
+
+                items.Sort((a1, a2) => a1.Tag.CompareTo(a2.Tag));
+
+                ScrollToTopLeft();
+                selectedItemIndex = 0;
+                Invalidate();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        private void sortByNameToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                items.Sort(
+                        (a1, a2) =>
+                            {
+                                return a1.ShortName.CompareTo(a2.ShortName);
+                        }
                     );
                 Invalidate();
             }
