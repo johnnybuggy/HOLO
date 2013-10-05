@@ -35,8 +35,8 @@
             this.lbProgress = new System.Windows.Forms.ToolStripStatusLabel();
             this.pbProgress = new System.Windows.Forms.ToolStripProgressBar();
             this.pnTop = new System.Windows.Forms.Panel();
-            this.button2 = new System.Windows.Forms.Button();
-            this.button1 = new System.Windows.Forms.Button();
+            this.pictureBox2 = new System.Windows.Forms.PictureBox();
+            this.tbSearch = new System.Windows.Forms.TextBox();
             this.pbSettings = new System.Windows.Forms.PictureBox();
             this.label1 = new System.Windows.Forms.Label();
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
@@ -47,6 +47,7 @@
             this.pnAudios = new HoloUI.AudiosPanel();
             this.ssMain.SuspendLayout();
             this.pnTop.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pbSettings)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.btAddFolder)).BeginInit();
@@ -99,8 +100,8 @@
             // 
             this.pnTop.BackgroundImage = global::HoloUI.Resource.bgTop;
             this.pnTop.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.pnTop.Controls.Add(this.button2);
-            this.pnTop.Controls.Add(this.button1);
+            this.pnTop.Controls.Add(this.pictureBox2);
+            this.pnTop.Controls.Add(this.tbSearch);
             this.pnTop.Controls.Add(this.pbSettings);
             this.pnTop.Controls.Add(this.label1);
             this.pnTop.Controls.Add(this.pictureBox1);
@@ -111,27 +112,29 @@
             this.pnTop.Size = new System.Drawing.Size(838, 67);
             this.pnTop.TabIndex = 3;
             // 
-            // button2
+            // pictureBox2
             // 
-            this.button2.Location = new System.Drawing.Point(286, 10);
-            this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(75, 23);
-            this.button2.TabIndex = 5;
-            this.button2.Text = "button2";
-            this.button2.UseVisualStyleBackColor = true;
-            this.button2.Visible = false;
-            this.button2.Click += new System.EventHandler(this.button2_Click);
+            this.pictureBox2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.pictureBox2.BackColor = System.Drawing.Color.Transparent;
+            this.pictureBox2.Image = global::HoloUI.Resource._1375954379_edit_find;
+            this.pictureBox2.Location = new System.Drawing.Point(649, 3);
+            this.pictureBox2.Name = "pictureBox2";
+            this.pictureBox2.Size = new System.Drawing.Size(16, 16);
+            this.pictureBox2.SizeMode = System.Windows.Forms.PictureBoxSizeMode.AutoSize;
+            this.pictureBox2.TabIndex = 5;
+            this.pictureBox2.TabStop = false;
             // 
-            // button1
+            // tbSearch
             // 
-            this.button1.Location = new System.Drawing.Point(182, 10);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(75, 23);
-            this.button1.TabIndex = 4;
-            this.button1.Text = "button1";
-            this.button1.UseVisualStyleBackColor = true;
-            this.button1.Visible = false;
-            this.button1.Click += new System.EventHandler(this.button1_Click);
+            this.tbSearch.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.tbSearch.BackColor = System.Drawing.Color.CornflowerBlue;
+            this.tbSearch.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.tbSearch.ForeColor = System.Drawing.Color.White;
+            this.tbSearch.Location = new System.Drawing.Point(671, 3);
+            this.tbSearch.Name = "tbSearch";
+            this.tbSearch.Size = new System.Drawing.Size(118, 13);
+            this.tbSearch.TabIndex = 4;
+            this.tbSearch.TextChanged += new System.EventHandler(this.tbSearch_TextChanged);
             // 
             // pbSettings
             // 
@@ -207,7 +210,7 @@
             this.pnAudios.Location = new System.Drawing.Point(0, 67);
             this.pnAudios.Name = "pnAudios";
             this.pnAudios.Size = new System.Drawing.Size(838, 389);
-            this.pnAudios.TabIndex = 4;
+            this.pnAudios.TabIndex = 0;
             // 
             // MainForm
             // 
@@ -226,6 +229,7 @@
             this.ssMain.PerformLayout();
             this.pnTop.ResumeLayout(false);
             this.pnTop.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pbSettings)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.btAddFolder)).EndInit();
@@ -251,8 +255,8 @@
         private System.Windows.Forms.ToolStripMenuItem miRemoveShowedItems;
         private System.Windows.Forms.ToolStripStatusLabel lbProgress;
         private System.Windows.Forms.ToolStripStatusLabel lbAddedCount;
-        private System.Windows.Forms.Button button1;
-        private System.Windows.Forms.Button button2;
+        private System.Windows.Forms.TextBox tbSearch;
+        private System.Windows.Forms.PictureBox pictureBox2;
 
     }
 }

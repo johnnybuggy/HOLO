@@ -33,7 +33,7 @@ namespace HoloUI
             //load database
             try
             {
-                DB = DB.Load(DBPath, GetWellKnownTypes());
+                DB = DB.Load(DBPath, DefaultFactory.GetWellKnownTypes());
             }catch(Exception ex)
             {
                 MessageBox.Show(ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
@@ -42,16 +42,6 @@ namespace HoloUI
 
             //init factory
             Factory = new DefaultFactory();
-        }
-
-        private static Dictionary<int, Type> GetWellKnownTypes()
-        {
-            var res = new Dictionary<int, Type>();
-
-            res.Add(0, typeof (Envelope));
-            res.Add(1, typeof (Tempogram));
-
-            return res;
         }
 
         public static void OnCloseApplication(CloseAppplicationEventArgs e)

@@ -1,9 +1,11 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Windows.Forms;
 using HoloDB;
+using HoloKernel;
 using HoloProcessors;
 using HoloUI.Controls;
 
@@ -11,11 +13,23 @@ namespace HoloUI
 {
     public partial class AudiosPanel : UserControl
     {
+        private Font SmallFont;
+        private Font SmallestFont;
+        private FindSimilarPropertiesForm findSimilarPropertiesForm = new FindSimilarPropertiesForm();
+
         public AudiosPanel()
         {
             InitializeComponent();
 
             SetStyle( ControlStyles.AllPaintingInWmPaint | ControlStyles.OptimizedDoubleBuffer | ControlStyles.UserPaint, true);
+        }
+
+        protected override void OnLoad(EventArgs e)
+        {
+            base.OnLoad(e);
+
+            SmallFont = new Font("SmallFont", Font.Size - 1);
+            SmallestFont = new Font("SmallFont", Font.Size - 2);
         }
 
         private const int itemWidth = 250;
@@ -30,6 +44,7 @@ namespace HoloUI
 
         private EnvelopeDrawer envelopeDrawer = new EnvelopeDrawer();
         private SamplesDrawer SamplesDrawer = new SamplesDrawer();
+        private CDFDrawer cdfDrawer = new CDFDrawer();
 
         public void Build(Audios items)
         {
@@ -90,9 +105,24 @@ namespace HoloUI
             return new Rectangle(itemBounds.Left + 22, itemBounds.Top + 18, 64, 32);
         }
 
+        Rectangle GetVolumeDescRect(Rectangle itemBounds)
+        {
+            return new Rectangle(itemBounds.Left + 22, itemBounds.Top + 18 + 35, 32, 32);
+        }
+
         Rectangle GetTempogramRect(Rectangle itemBounds)
         {
-            return new Rectangle(itemBounds.Left + 64 + 25, itemBounds.Top + 18, 100, 32);
+            return new Rectangle(itemBounds.Left + 64 + 25, itemBounds.Top + 18, 63, 32);
+        }
+
+        Rectangle GetShortTempogramRect(Rectangle itemBounds)
+        {
+            return new Rectangle(itemBounds.Left + 64 + 25, itemBounds.Top + 18 + 35, 63, 32);
+        }
+
+        Rectangle GetTempoRect(Rectangle itemBounds)
+        {
+            return new Rectangle(itemBounds.Left + 64 + 25 + 65, itemBounds.Top + 18, 50, 35);
         }
 
         private void DrawItem(Graphics graphics, int itemIndex,  Rectangle bounds)
@@ -101,7 +131,7 @@ namespace HoloUI
                 return;
             var item = items[itemIndex];
             var color1 = Color.White;
-            var color2 = Color.Silver;
+            var color2 = Color.FromArgb(210, 210, 210);
 
             if (itemIndex == selectedItemIndex)
                 color2 = Color.Orange;
@@ -126,7 +156,21 @@ namespace HoloUI
 
             var tempogram = item.GetData<Tempogram>();
             if (tempogram != null)
-                SamplesDrawer.DrawOneSide(tempogram.Values, graphics, GetTempogramRect(bounds), true);
+            {
+                cdfDrawer.Draw(tempogram.LongTempogram, graphics, GetTempogramRect(bounds));
+                cdfDrawer.Draw(tempogram.ShortTempogram, graphics, GetShortTempogramRect(bounds));
+
+                using (var brush = new SolidBrush(ForeColor))
+                {
+                    var sf = new StringFormat() {Trimming = StringTrimming.None};
+                    graphics.DrawString(tempogram.Description, SmallFont, brush, GetTempoRect(bounds), sf);
+                }
+            }
+
+            var volumeDescriptor = item.GetData<VolumeDescriptor>();
+            if (volumeDescriptor != null)
+                cdfDrawer.Draw(volumeDescriptor, graphics, GetVolumeDescRect(bounds));
+
         }
 
         public int PointToItemIndex(Point p)
@@ -137,9 +181,13 @@ namespace HoloUI
             return (p.Y + VerticalScroll.Value)/itemHeight * itemsPerRow  + j;
         }
 
+        private Point clickMousePoint;
+
         protected override void OnMouseDown(MouseEventArgs e)
         {
             base.OnMouseDown(e);
+
+            clickMousePoint = e.Location;
 
             var index = PointToItemIndex(e.Location);
             if (index != selectedItemIndex)
@@ -161,6 +209,7 @@ namespace HoloUI
         {
             base.OnMouseMove(e);
             if(Control.MouseButtons == System.Windows.Forms.MouseButtons.Left)
+            if(Math.Abs(clickMousePoint.X - e.Location.X) + Math.Abs(clickMousePoint.Y - e.Location.Y) > 3)
             {
                 if (selectedItemIndex < 0 || selectedItemIndex >= items.Count)
                     return;
@@ -178,6 +227,224 @@ namespace HoloUI
                     return;
                 var item = items[selectedItemIndex];
                 Process.Start(item.FullPath);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        private void miVolumeDistr_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                if(selectedItemIndex < 0 || selectedItemIndex >= items.Count)
+                    return;
+                var item = items[selectedItemIndex];
+                var desc = item.GetData<VolumeDescriptor>();
+                if(desc != null)
+                foreach (var i in items)
+                {
+                    var d = i.GetData<VolumeDescriptor>();
+                    if(d == null)
+                    {
+                        i.Tag = 10;
+                        continue;
+                    }
+                    i.Tag = d.Distance(desc);
+                }
+
+                items.Sort((a1, a2) => a1.Tag.CompareTo(a2.Tag));
+
+                ScrollToTopLeft();
+                selectedItemIndex = 0;
+                Invalidate();
+            }catch(Exception ex)
+            {
+                MessageBox.Show(ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        private void tempoDistributionToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (selectedItemIndex < 0 || selectedItemIndex >= items.Count)
+                return;
+            try
+            {
+                var item = items[selectedItemIndex];
+                var desc = item.GetData<Tempogram>();
+                if(desc != null)
+                foreach (var i in items)
+                {
+                    var d = i.GetData<Tempogram>();
+                    if (d == null)
+                    {
+                        i.Tag = 10;
+                        continue;
+                    }
+                    var d1 = desc.LongTempogram.Distance(d.LongTempogram);
+                    var d2 = desc.ShortTempogram.Distance(d.ShortTempogram);
+                    var d3 = Math.Abs(desc.Intensity - d.Intensity);
+                    i.Tag = d1 + d2 * 0.0003f + d3 * 0.0002f;
+                }
+
+                items.Sort((a1, a2) => a1.Tag.CompareTo(a2.Tag));
+
+                ScrollToTopLeft();
+                selectedItemIndex = 0;
+                Invalidate();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        void ScrollToTopLeft()
+        {
+            HorizontalScroll.Value = 0;
+            VerticalScroll.Value = 0;
+            AutoScrollMinSize += new Size(1, 1);
+            AutoScrollMinSize -= new Size(1, 1);   
+        }
+
+        private void sortByTempoToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                items.Sort(
+                    (a1, a2) =>
+                    {
+                        var t1 = a1.GetData<Tempogram>();
+                        var t2 = a2.GetData<Tempogram>();
+                        if (t1 != null && t2 != null)
+                            return t1.Intensity.CompareTo(t2.Intensity);
+                        else
+                            return a1.ShortName.CompareTo(a2.ShortName);
+                    }
+                    );
+                Invalidate();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        private void miDebug_Click(object sender, EventArgs e)
+        {
+            if (selectedItemIndex < 0 || selectedItemIndex >= items.Count)
+                return;
+            try
+            {
+                var item = items[selectedItemIndex];
+
+                //new Tester(RunManager.Factory).Process(item);
+
+                Invalidate();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        private void sortByRhythmToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                items.Sort(
+                        (a1, a2) =>
+                        {
+                            var t1 = a1.GetData<Tempogram>();
+                            var t2 = a2.GetData<Tempogram>();
+                            if (t1 != null && t2 != null && t1.LongRhythmIsValid && t2.LongRhythmIsValid)
+                                return t1.LongRhythm.CompareTo(t2.LongRhythm);
+                            if (t1 == null && t2 != null) return 1;
+                            if (t2 == null && t1 != null) return -1;
+                            if (t1 == t2) return 0;
+                            if (t1.LongRhythmIsValid && !t2.LongRhythmIsValid) return -1;
+                            if (t2.LongRhythmIsValid && !t1.LongRhythmIsValid) return 1;
+
+                            return 0;
+                        }
+                    );
+                Invalidate();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        private void findSimilarsToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (selectedItemIndex < 0 || selectedItemIndex >= items.Count)
+                return;
+            try
+            {
+                var item = items[selectedItemIndex];
+
+                if (findSimilarPropertiesForm.ShowDialog() != DialogResult.OK)
+                    return;
+
+                var cbAmpEnvelope = findSimilarPropertiesForm.cbAmpEnvelope.Checked;
+                var cbIntensity = findSimilarPropertiesForm.cbIntensity.Checked;
+                var cbLongRhythm = findSimilarPropertiesForm.cbLongRhythm.Checked;
+                var cbShortRhythm = findSimilarPropertiesForm.cbShortRhythm.Checked;
+                var cbVolumeDistr = findSimilarPropertiesForm.cbVolumeDistr.Checked;
+
+                var tempogram = item.GetData<Tempogram>();
+                var volumeDescr = item.GetData<VolumeDescriptor>();
+
+                foreach (var i in items)
+                {
+                    var distance = 0f;
+                    var d = i.GetData<Tempogram>();
+                    if (d == null || tempogram == null)
+                        distance += 1;
+                    else
+                    {
+                        if (cbLongRhythm) distance += tempogram.LongTempogram.Distance(d.LongTempogram);
+                        if (cbShortRhythm) distance += tempogram.ShortTempogram.Distance(d.ShortTempogram) * 0.3f;
+                        if (cbIntensity) distance += Math.Abs(tempogram.Intensity - d.Intensity) * 0.2f;
+                    }
+
+                    if(cbVolumeDistr)
+                    {
+                        var vd = i.GetData<VolumeDescriptor>();
+                        if (vd == null || volumeDescr == null)
+                            distance += 1f;
+                        else
+                            distance += volumeDescr.Distance(vd);
+                    }
+
+                    i.Tag = distance;
+                }
+
+                items.Sort((a1, a2) => a1.Tag.CompareTo(a2.Tag));
+
+                ScrollToTopLeft();
+                selectedItemIndex = 0;
+                Invalidate();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        private void sortByNameToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                items.Sort(
+                        (a1, a2) =>
+                            {
+                                return a1.ShortName.CompareTo(a2.ShortName);
+                        }
+                    );
+                Invalidate();
             }
             catch (Exception ex)
             {

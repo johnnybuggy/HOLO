@@ -28,7 +28,7 @@ namespace HoloKernel
                 var intIndex = (int) index;
                 if (intIndex < 0) return 0;
                 if (index > Values.Length) return 0;
-                if (intIndex == Values.Length) return Values[intIndex];
+                if (intIndex == Values.Length) return Values[intIndex - 1];
 
                 var rest = index - intIndex;
                 return (1 - rest)*Values[intIndex] + rest*Values[intIndex + 1];//linear interpolation
