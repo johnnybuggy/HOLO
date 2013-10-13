@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<HarvestProps xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <SnapCount>700</SnapCount>
+  <SnapSize>4096</SnapSize>
+  <DownScaleRate>200</DownScaleRate>
+  <StatsCalcMethod>Clustered 2D</StatsCalcMethod>
+  <AmplitudeFunc>Max(Log(X), 0)^2</AmplitudeFunc>
+  <FreqCutoffRate>1.5</FreqCutoffRate>
+  <ClustersFuzz>1</ClustersFuzz>
+  <OverlapRate>1</OverlapRate>
+  <DoFullNormalize>0</DoFullNormalize>
+  <ClusteringProperties>
+    <ClustersCount>10</ClustersCount>
+    <ClustersMethod>Greedy</ClustersMethod>
+    <CleanupOutliers>0</CleanupOutliers>
+    <NeigborhoodDistance>20</NeigborhoodDistance>
+    <MinNeighborhoodPerc>7</MinNeighborhoodPerc>
+    <CentroidSearchMethod>MinDist</CentroidSearchMethod>
+  </ClusteringProperties>
+  <CentroidConfigFile>.\centroids.xml</CentroidConfigFile>
+</HarvestProps>
