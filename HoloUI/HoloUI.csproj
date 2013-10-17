@@ -142,12 +142,6 @@
     <None Include="Resources\folder_open_add.png" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="bass.dll">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="bassmix.dll">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
     <None Include="Resources\1375954379_edit-find.png" />
     <None Include="Resources\search.png" />
   </ItemGroup>
