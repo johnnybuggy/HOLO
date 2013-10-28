@@ -24,8 +24,8 @@ namespace Holo.UI
             yield return new EnvelopeBuilder(this);
             //build tempogram
             yield return new TempogramBuilder(this);
-            //
-            yield return new SimpleDescriptorsBuilder();
+            //length of audio
+            yield return new AudioLengthDescriptorBuilder();
         }
 
         public static Dictionary<int, Type> GetWellKnownTypes()
@@ -36,6 +36,7 @@ namespace Holo.UI
             res.Add(1, typeof(Tempogram));
             res.Add(2, typeof(VolumeDescriptor));
             res.Add(3, typeof(SpectrumDescriptor));
+            res.Add(4, typeof(AudioLengthDescriptor));
 
             return res;
         }

@@ -1,0 +1,45 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1" MembersFormat="FullSignature">
+  <Comment CommentText="Each descriptor must implement one (or several) interface:">
+    <Position X="0.521" Y="2.542" Height="0.323" Width="8.231" />
+  </Comment>
+  <Comment CommentText="Also the descriptor must implement interface IStorable for loading(saving) from(to) database:">
+    <Position X="0.521" Y="5.052" Height="0.323" Width="8.231" />
+  </Comment>
+  <Comment CommentText="Sample processor must implement ISampleProcessor interface:">
+    <Position X="0.5" Y="0.562" Height="0.323" Width="8.231" />
+  </Comment>
+  <Interface Name="HoloKernel.ICompareDescriptor">
+    <Position X="0.5" Y="3" Width="2.75" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAACAAAAAAAABAAAAAAAA=</HashCode>
+      <FileName>Interfaces\ICompareDescriptor.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="HoloKernel.IDistanceDescriptor">
+    <Position X="3.5" Y="3" Width="2.75" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAACAAAABAAAAAAAAAAAA=</HashCode>
+      <FileName>Interfaces\IDistanceDescriptor.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="HoloKernel.ITextDescriptor">
+    <Position X="6.5" Y="3" Width="2.25" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Interfaces\ITextDescriptor.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="HoloDB.IStorable">
+    <Position X="0.5" Y="5.5" Width="2.5" />
+    <TypeIdentifier />
+  </Interface>
+  <Interface Name="HoloKernel.ISampleProcessor">
+    <Position X="0.5" Y="1" Width="3" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAgAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Interfaces\ISampleProcessor.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>
