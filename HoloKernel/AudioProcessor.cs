@@ -30,7 +30,7 @@ namespace HoloKernel
         public AudioProcessor(Factory factory)
         {
             this.factory = factory;
-            TargetBitrate = 8000;
+            TargetBitrate = 24000;//8000
         }
 
         /// <summary>

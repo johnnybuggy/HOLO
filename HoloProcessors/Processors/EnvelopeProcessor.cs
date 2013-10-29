@@ -9,12 +9,12 @@ namespace HoloProcessors
     /// <summary>
     /// Builds amplitude envelope
     /// </summary>
-    public class EnvelopeBuilder : ISampleProcessor
+    public class EnvelopeProcessor : ISampleProcessor
     {
         private Factory factory;
         const int EnvelopeLength = 64;
 
-        public EnvelopeBuilder(Factory factory)
+        public EnvelopeProcessor(Factory factory)
         {
             this.factory = factory;   
         }
@@ -49,6 +49,7 @@ namespace HoloProcessors
             //resample
             var resampler = factory.CreateResampler();
             var resampled = resampler.Resample(s, info.Samples.Bitrate * ((float)EnvelopeLength / info.Samples.Values.Length));
+
             //build packed array
             var envelope = new Envelope(resampled);
             //save into audio item

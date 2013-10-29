@@ -6,13 +6,13 @@ using HoloKernel;
 
 namespace HoloProcessors
 {
-    public class TempogramBuilder : ISampleProcessor
+    public class TempogramProcessor : ISampleProcessor
     {
         private const float maxRithmDuration = 6;//seconds
         private const float minAmplitudeChangeForIntensityRate = 0.2f;
         private Factory factory;
 
-        public TempogramBuilder(Factory factory)
+        public TempogramProcessor(Factory factory)
         {
             this.factory = factory;
         }
@@ -23,7 +23,7 @@ namespace HoloProcessors
 
             var s = info.Samples;
 
-            s = new EnvelopeBuilder(factory).Build(info.Samples, 32, false);
+            s = new EnvelopeProcessor(factory).Build(info.Samples, 32, false);
             var s2 = new Samples() { Values = new float[s.Values.Length], Bitrate = s.Bitrate };
             var intensity = 0; 
 

@@ -21,11 +21,9 @@ namespace Holo.UI
         public override IEnumerable<ISampleProcessor> CreateSampleProcessors()
         {
             //build envelope
-            yield return new EnvelopeBuilder(this);
+            yield return new EnvelopeProcessor(this);
             //build tempogram
-            yield return new TempogramBuilder(this);
-            //length of audio
-            yield return new AudioLengthDescriptorBuilder();
+            yield return new TempogramProcessor(this);
         }
 
         public static Dictionary<int, Type> GetWellKnownTypes()
@@ -35,8 +33,6 @@ namespace Holo.UI
             res.Add(0, typeof(Envelope));
             res.Add(1, typeof(Tempogram));
             res.Add(2, typeof(VolumeDescriptor));
-            res.Add(3, typeof(SpectrumDescriptor));
-            res.Add(4, typeof(AudioLengthDescriptor));
 
             return res;
         }

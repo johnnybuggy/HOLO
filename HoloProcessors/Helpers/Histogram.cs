@@ -7,7 +7,7 @@ using HoloKernel;
 namespace HoloProcessors
 {
     /// <summary>
-    /// Cumulative distribution function
+    /// Histogram
     /// </summary>
     public class Histogram : IStorable, IDistanceDescriptor
     {

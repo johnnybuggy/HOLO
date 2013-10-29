@@ -110,7 +110,7 @@ namespace HoloProcessors
             info.Samples.Normalize();
             var s = info.Samples;
 
-            s = new EnvelopeBuilder(factory).Build(info.Samples, 32, false);
+            s = new EnvelopeProcessor(factory).Build(info.Samples, 32, false);
             var s2 = new Samples() {Values = new float[s.Values.Length], Bitrate = s.Bitrate};
             
             for(int i=0;i<s.Values.Length - 1;i++)

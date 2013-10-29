@@ -197,7 +197,7 @@ namespace Holo.UI
             {
                 var t = item.GetData<Tempogram>();
                 if(t != null)
-                TempogramBuilder.CalcTempo(t);
+                TempogramProcessor.CalcTempo(t);
             }
             RunManager.DB.IsChanged = true;
         }
