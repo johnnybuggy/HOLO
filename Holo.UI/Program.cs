@@ -48,7 +48,10 @@ namespace Holo.UI
             again:
             try
             {
-                Application.Run(new MainForm());
+                Application.Run(new MainForm
+                                    {
+                                        Icon = Resource.HOLO
+                                    });
             }
             catch (ExitApplicationException ex)
             {

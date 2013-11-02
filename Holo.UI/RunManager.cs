@@ -23,10 +23,6 @@ namespace Holo.UI
 
         public static void OnStartApplication()
         {
-            //magic
-            typeof(Form).GetField("defaultIcon", BindingFlags.NonPublic | BindingFlags.Static).SetValue(null, Resource.HOLO);
-
-
             //load database
             try
             {
