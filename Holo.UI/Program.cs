@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Threading;
 using System.Windows.Forms;
-using Holo.UI.Exceptions;
+using Holo.Core;
 
 namespace Holo.UI
 {
@@ -28,56 +28,28 @@ namespace Holo.UI
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(true);
 
-            #region To refactor
-            // TODO: Legacy code. Needs refactoring.
-            try
-            {
-                RunManager.OnStartApplication();
-            }
-            catch (ExitApplicationException ex)
-            {
-                //System.Windows.Forms.MessageBox.Show(ex.Message, "Warning", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
-                return;
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                return;
-            }
-
-            again:
-            try
-            {
-                Application.Run(new MainForm
-                                    {
-                                        Icon = Resource.HOLO
-                                    });
-            }
-            catch (ExitApplicationException ex)
-            {
-                //return;
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
+            // TODO: Resolve factory as a depenedency by means of some DI solution.
+            DefaultFactory Factory = new DefaultFactory();
 
             try
             {
-                CloseAppplicationEventArgs e = new CloseAppplicationEventArgs();
-                RunManager.OnCloseApplication(e);
-                if (e.RestartMainForm)
-                    goto again;
-            }
-            catch (ExitApplicationException ex)
-            {
-                return;
+                HoloCore Core = new HoloCore(Factory);
+                
+                MainForm MainForm = new MainForm(Core)
+                                        {
+                                            Icon = Resource.HOLO
+                                        };
+                Core.SetView(MainForm);
+
+                Application.Run(MainForm);
+
+                Core.SaveDatabase();
             }
             catch (Exception ex)
             {
+                // TODO: Log exception.
                 MessageBox.Show(ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
-            #endregion
         }
     }
 }

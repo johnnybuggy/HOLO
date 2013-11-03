@@ -46,7 +46,7 @@ namespace Holo.UI
             this.ttMain = new System.Windows.Forms.ToolTip(this.components);
             this.cmSettings = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.miRemoveShowedItems = new System.Windows.Forms.ToolStripMenuItem();
-            this.pnAudios = new AudiosPanel();
+            this.pnAudios = new Holo.UI.Controls.AudiosPanel();
             this.ssMain.SuspendLayout();
             this.pnTop.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).BeginInit();

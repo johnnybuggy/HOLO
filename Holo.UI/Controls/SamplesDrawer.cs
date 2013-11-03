@@ -1,5 +1,5 @@
 ﻿using System.Drawing;
-using HoloKernel;
+using Holo.Core;
 
 namespace Holo.UI.Controls
 {

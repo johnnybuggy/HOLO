@@ -2,9 +2,8 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Runtime.InteropServices;
-using System.Text;
 
-namespace HoloKernel
+namespace Holo.Core
 {
     internal static class FileScanner
     {

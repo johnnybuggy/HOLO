@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
 using System.Text;
-using HoloKernel;
+using Holo.Core;
 using Un4seen.Bass;
 using Un4seen.Bass.AddOn.Mix;
 

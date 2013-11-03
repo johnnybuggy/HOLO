@@ -1,126 +1,101 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Threading;
 using System.Windows.Forms;
+using Holo.Core;
 using Holo.UI.Controls;
 using HoloDB;
-using HoloKernel;
 using HoloProcessors;
 
 namespace Holo.UI
 {
-    public partial class MainForm : Form
+    public partial class MainForm : Form, IView
     {
+        private readonly HoloCore Core;
+
+        private Audios ShownItems;
+
         private System.Timers.Timer tmProcessing;
 
-        public MainForm()
+        public MainForm(HoloCore core)
         {
+            if (core == null)
+            {
+                throw new ArgumentNullException("core");
+            }
+
+            Core = core;
+
             InitializeComponent();
 
+
             tmProcessing = new System.Timers.Timer(1000);
-            tmProcessing.Elapsed += new System.Timers.ElapsedEventHandler(tmProcessing_Elapsed);
+            tmProcessing.Elapsed += tmProcessing_Elapsed;
             tmProcessing.Start();
         }
 
         void tmProcessing_Elapsed(object sender, System.Timers.ElapsedEventArgs e)
         {
             tmProcessing.Stop();
+
             try
             {
-                ProcessAudios();
-            }catch(Exception ex)
-            {
-                //ignore
-                Console.WriteLine(ex.Message);
+                Core.ProcessAudios(UpdateProcessingProgress);
             }
+            catch (Exception ex)
+            {
+                // TODO: Log exception.
+            }
+
             tmProcessing.Start();
         }
 
-        private void ProcessAudios()
+        private void UpdateProcessingProgress(object sender, ProgressChangedEventArgs e)
         {
-            //find unprocessed items
-            var list = new List<Audio>();
-            lock (RunManager.DB.Audios)
-                foreach (var item in RunManager.DB.Audios)
-                    if(item.State == AudioState.Unprocessed)
-                        list.Add(item);
+            if (InvokeRequired)
+            {
+                Invoke((MethodInvoker)(() => UpdateProcessingProgress(sender, e)));
+                return;
+            }
 
-            var processor = RunManager.Factory.CreateAudioProcessor();
-            processor.Progress += (o, e) => Invoke((MethodInvoker)(() =>
-                                                                     {
-                                                                         RunManager.DB.IsChanged = true;
-                                                                         lbProgress.Visible = true;
-                                                                         pbProgress.Visible = e.ProgressPercentage < 100;
-                                                                         pbProgress.Value = e.ProgressPercentage;
-                                                                         lbProgress.Text = "Processed: " +e.ProgressPercentage + "%";
-                                                                         ssMain.Refresh();
-                                                                         pnAudios.Refresh();
-                                                                     }));
-            processor.Process(list);
+            lbProgress.Visible = true;
+            pbProgress.Visible = e.ProgressPercentage < 100;
+            pbProgress.Value = e.ProgressPercentage;
+            lbProgress.Text = "Processed: " + e.ProgressPercentage + "%";
+            ssMain.Refresh();
+            pnAudios.Refresh();
         }
 
         void MainForm_DragEnter(object sender, DragEventArgs e)
         {
-            if (e.Data.GetDataPresent(DataFormats.FileDrop)) e.Effect = DragDropEffects.Copy;
+            if (e.Data.GetDataPresent(DataFormats.FileDrop))
+                e.Effect = DragDropEffects.Copy;
         }
 
-        void MainForm_DragDrop(object sender, DragEventArgs e) 
+        void MainForm_DragDrop(object sender, DragEventArgs e)
         {
-            string[] files = (string[]) e.Data.GetData(DataFormats.FileDrop);
-            ScanInOtherThread(files);
+            string[] Files = (string[])e.Data.GetData(DataFormats.FileDrop);
+            Core.ScanInBackground(Files);
         }
 
         private void btAddFolder_Click(object sender, EventArgs e)
         {
-            var form = new SelectFolderForm();
-            form.SelectedFolder = Environment.GetFolderPath(Environment.SpecialFolder.MyMusic);
-            if (form.ShowDialog() == System.Windows.Forms.DialogResult.OK)
-                ScanInOtherThread(new string[] { form.SelectedFolder });
-        }
+            var Form = new SelectFolderForm();
 
-        void ScanInOtherThread(IEnumerable<string> pathes)
-        {
-            var th = new Thread(()=>Scan(pathes));
-            th.IsBackground = true;
-            th.Start();
-        }
+            Form.SelectedFolder = Environment.GetFolderPath(Environment.SpecialFolder.MyMusic);
 
-        void Scan(IEnumerable<string> pathes)
-        {
-            try
+            if (Form.ShowDialog() == DialogResult.OK)
             {
-                int counter = 0;
-                UpdateAddedCountLabel(counter);
-
-                Dictionary<string, int> dict;
-                lock (RunManager.DB.Audios)
-                    dict = RunManager.DB.Audios.GetIndexesByFullPath();
-
-                foreach (var path in AudioFileScanner.Scan(pathes))
-                if(!dict.ContainsKey(path))
-                {
-                    var item = new Audio() {FullPath = path};
-                    lock (RunManager.DB.Audios)
-                        RunManager.DB.Audios.Add(item);
-                    RunManager.DB.IsChanged = true;
-                    counter++;
-                    if (counter%7 == 0)
-                        UpdateAddedCountLabel(counter);
-                }
-
-                UpdateAddedCountLabel(counter);
-
-                Build();
-            }
-            catch (Exception ex)
-            {
-                ShowError(ex);
+                Core.ScanInBackground(new string[] { Form.SelectedFolder });
             }
         }
 
-        void ShowError(Exception ex)
+
+
+        public void ShowError(Exception ex)
         {
-            if(InvokeRequired)
+            if (InvokeRequired)
             {
                 Invoke((MethodInvoker)(() => ShowError(ex)));
                 return;
@@ -129,9 +104,9 @@ namespace Holo.UI
             MessageBox.Show(ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
         }
 
-        private void UpdateAddedCountLabel(int count)
+        public void UpdateAddedCountLabel(int count)
         {
-            if(InvokeRequired)
+            if (InvokeRequired)
             {
                 Invoke((MethodInvoker)(() => UpdateAddedCountLabel(count)));
                 return;
@@ -146,20 +121,21 @@ namespace Holo.UI
         protected override void OnLoad(EventArgs e)
         {
             base.OnLoad(e);
-            Build();
+            DisplayItems();
         }
 
-        private void Build()
+        public void DisplayItems()
         {
             if (InvokeRequired)
             {
-                Invoke((MethodInvoker)(Build));
+                Invoke((MethodInvoker)(DisplayItems));
                 return;
             }
 
-            showedItems = new Audios(RunManager.DB.Audios);//temp !!!!!
-            pnAudios.Build(showedItems);
-            lbItemCount.Text = "Items: " + showedItems.Count;
+            ShownItems = new Audios(Core.GetAudios());//temp !!!!!
+
+            pnAudios.Build(ShownItems);
+            lbItemCount.Text = "Items: " + ShownItems.Count;
             Invalidate(true);
         }
 
@@ -170,75 +146,70 @@ namespace Holo.UI
 
         private void miRemoveShowedItems_Click(object sender, EventArgs e)
         {
-            RemoveShowedItems();
+            RemoveShownItems();
         }
 
-        private Audios showedItems;
 
-        private void RemoveShowedItems()
+
+        private void RemoveShownItems()
         {
-            try
-            {
-                lock (RunManager.DB.Audios)
-                   RunManager.DB.Audios.RemoveRange(showedItems);
-                RunManager.DB.IsChanged = true;
-
-                Build();
-            }
-            catch (Exception ex)
-            {
-                ShowError(ex);
-            }
+            Core.RemoveItems(ShownItems);
         }
 
         private void button1_Click(object sender, EventArgs e)
         {
-            foreach (var item in RunManager.DB.Audios)
+            foreach (var Item in Core.GetAudios())
             {
-                var t = item.GetData<Tempogram>();
-                if(t != null)
-                TempogramProcessor.CalcTempo(t);
+                var Tempogram = Item.GetData<Tempogram>();
+
+                if (Tempogram != null)
+                {
+                    TempogramProcessor.CalcTempo(Tempogram);
+                }
             }
-            RunManager.DB.IsChanged = true;
+
+            Core.MarkDatabaseAsChanged();
         }
 
         private void tbSearch_TextChanged(object sender, EventArgs e)
         {
-            var pattern = tbSearch.Text;
+            var Pattern = tbSearch.Text;
             try
             {
-                var parts = pattern.ToLower().Split(new char[] {' '}, StringSplitOptions.RemoveEmptyEntries);
+                var Parts = Pattern.ToLower().Split(new char[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
 
-                if (parts.Length == 0)
+                if (Parts.Length == 0)
                 {
-                    Build();
+                    DisplayItems();
                     return;
                 }
 
-                showedItems = new Audios();
+                ShownItems = new Audios();
 
-                foreach(var item in RunManager.DB.Audios)
+                foreach (var Item in Core.GetAudios())
                 {
-                    bool found = true;
-                    var name = item.ShortName.ToLower();
-                    foreach(var part in parts)
-                        if(!name.Contains(part))
+                    bool IsFound = true;
+                    var AudioName = Item.ShortName.ToLower();
+                    foreach (var Part in Parts)
+                    {
+                        if (!AudioName.Contains(Part))
                         {
-                            found = false;
+                            IsFound = false;
                             break;
                         }
+                    }
 
-                    if (found)
-                        showedItems.Add(item);
+                    if (IsFound)
+                        ShownItems.Add(Item);
                 }
 
-                pnAudios.Build(showedItems);
-                lbItemCount.Text = "Items: " + showedItems.Count;
+                pnAudios.Build(ShownItems);
+                lbItemCount.Text = "Items: " + ShownItems.Count;
                 Invalidate(true);
             }
-            catch (Exception ex)
+            catch (Exception E)
             {
-                ShowError(ex);
+                ShowError(E);
             }
         }
     }

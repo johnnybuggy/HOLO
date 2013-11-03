@@ -1,12 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Text;
 using System.Threading;
-using HoloKernel;
 using HoloDB;
 
-namespace HoloKernel
+namespace Holo.Core
 {
     /// <summary>
     /// Decodes audio sources, calculates chracteristics of signal.

@@ -12,6 +12,21 @@
     <AssemblyName>Holo.UI</AssemblyName>
     <TargetFrameworkVersion>v2.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
+    <PublishUrl>publish\</PublishUrl>
+    <Install>true</Install>
+    <InstallFrom>Disk</InstallFrom>
+    <UpdateEnabled>false</UpdateEnabled>
+    <UpdateMode>Foreground</UpdateMode>
+    <UpdateInterval>7</UpdateInterval>
+    <UpdateIntervalUnits>Days</UpdateIntervalUnits>
+    <UpdatePeriodically>false</UpdatePeriodically>
+    <UpdateRequired>false</UpdateRequired>
+    <MapFileExtensions>true</MapFileExtensions>
+    <ApplicationRevision>0</ApplicationRevision>
+    <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
+    <IsWebBootstrapper>false</IsWebBootstrapper>
+    <UseApplicationTrust>false</UseApplicationTrust>
+    <BootstrapperEnabled>true</BootstrapperEnabled>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -21,6 +36,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <PlatformTarget>x86</PlatformTarget>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -66,7 +82,6 @@
       <DependentUpon>SelectFolderForm.cs</DependentUpon>
     </Compile>
     <Compile Include="DefaultFactory.cs" />
-    <Compile Include="Exceptions\ExitApplicationException.cs" />
     <Compile Include="Controls\ExplorerTree.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -83,7 +98,6 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Resource.resx</DependentUpon>
     </Compile>
-    <Compile Include="RunManager.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Controls\AudioSourcesPanel.resx">
@@ -118,6 +132,10 @@
     <None Include="Resources\bgTop.png" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Holo.Core\Holo.Core.csproj">
+      <Project>{E9C9C82F-6B7C-4BC0-BF0F-D6F05D3C9DDA}</Project>
+      <Name>Holo.Core</Name>
+    </ProjectReference>
     <ProjectReference Include="..\HoloBassDecoder\HoloBassDecoder.csproj">
       <Project>{7B70E195-7999-4435-91FD-AB1D288ED885}</Project>
       <Name>HoloBassDecoder</Name>
@@ -125,10 +143,6 @@
     <ProjectReference Include="..\HoloDB\HoloDB.csproj">
       <Project>{58947E8E-F25D-413D-83B6-E9E31A45104D}</Project>
       <Name>HoloDB</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\HoloKernel\HoloKernel.csproj">
-      <Project>{E9C9C82F-6B7C-4BC0-BF0F-D6F05D3C9DDA}</Project>
-      <Name>HoloKernel</Name>
     </ProjectReference>
     <ProjectReference Include="..\HoloProcessors\HoloProcessors.csproj">
       <Project>{3F1512E7-3875-4863-A41F-A2AC25E3CB4E}</Project>
@@ -152,11 +166,11 @@
     <Content Include="..\Images\HOLO.ico">
       <Link>HOLO.ico</Link>
     </Content>
-    <Content Include="..\Libs\BASS\bass.dll">
+    <Content Include="..\Libs\BASS\x86\bass.dll">
       <Link>bass.dll</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="..\Libs\BASS\bassmix.dll">
+    <Content Include="..\Libs\BASS\x86\bassmix.dll">
       <Link>bassmix.dll</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
@@ -172,6 +186,18 @@
       <Link>x86\libfftw3l-3.dll</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <BootstrapperPackage Include="Microsoft.Net.Client.3.5">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5 SP1 Client Profile</ProductName>
+      <Install>false</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Net.Framework.3.5.SP1">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5 SP1</ProductName>
+      <Install>true</Install>
+    </BootstrapperPackage>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

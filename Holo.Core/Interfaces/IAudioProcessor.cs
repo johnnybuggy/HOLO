@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using HoloDB;
 
-namespace HoloKernel
+namespace Holo.Core
 {
     public interface IAudioProcessor
     {

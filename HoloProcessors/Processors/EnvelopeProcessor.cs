@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using Holo.Core;
 using HoloDB;
-using HoloKernel;
 
 namespace HoloProcessors
 {
@@ -11,12 +11,12 @@ namespace HoloProcessors
     /// </summary>
     public class EnvelopeProcessor : ISampleProcessor
     {
-        private Factory factory;
+        private readonly Factory Factory;
         const int EnvelopeLength = 64;
 
         public EnvelopeProcessor(Factory factory)
         {
-            this.factory = factory;   
+            Factory = factory;   
         }
 
         /// <summary>
@@ -47,7 +47,7 @@ namespace HoloProcessors
             //build amplitude envelope
             var s = Build(info.Samples);
             //resample
-            var resampler = factory.CreateResampler();
+            var resampler = Factory.CreateResampler();
             var resampled = resampler.Resample(s, info.Samples.Bitrate * ((float)EnvelopeLength / info.Samples.Values.Length));
 
             //build packed array

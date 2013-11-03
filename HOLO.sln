@@ -3,8 +3,6 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2012
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HoloBassDecoder", "HoloBassDecoder\HoloBassDecoder.csproj", "{7B70E195-7999-4435-91FD-AB1D288ED885}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HoloKernel", "HoloKernel\HoloKernel.csproj", "{E9C9C82F-6B7C-4BC0-BF0F-D6F05D3C9DDA}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HoloDB", "HoloDB\HoloDB.csproj", "{58947E8E-F25D-413D-83B6-E9E31A45104D}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HoloProcessors", "HoloProcessors\HoloProcessors.csproj", "{3F1512E7-3875-4863-A41F-A2AC25E3CB4E}"
@@ -12,6 +10,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Holo", "Holo\Holo.csproj", "{87D6877E-1491-4963-873E-A375C8C01F9C}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Holo.UI", "Holo.UI\Holo.UI.csproj", "{701C48F8-2F23-4E80-979D-EE36A0B55E64}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Holo.Core", "Holo.Core\Holo.Core.csproj", "{E9C9C82F-6B7C-4BC0-BF0F-D6F05D3C9DDA}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -33,16 +33,6 @@ Global
 		{7B70E195-7999-4435-91FD-AB1D288ED885}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
 		{7B70E195-7999-4435-91FD-AB1D288ED885}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{7B70E195-7999-4435-91FD-AB1D288ED885}.Release|x86.ActiveCfg = Release|Any CPU
-		{E9C9C82F-6B7C-4BC0-BF0F-D6F05D3C9DDA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{E9C9C82F-6B7C-4BC0-BF0F-D6F05D3C9DDA}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{E9C9C82F-6B7C-4BC0-BF0F-D6F05D3C9DDA}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
-		{E9C9C82F-6B7C-4BC0-BF0F-D6F05D3C9DDA}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
-		{E9C9C82F-6B7C-4BC0-BF0F-D6F05D3C9DDA}.Debug|x86.ActiveCfg = Debug|Any CPU
-		{E9C9C82F-6B7C-4BC0-BF0F-D6F05D3C9DDA}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{E9C9C82F-6B7C-4BC0-BF0F-D6F05D3C9DDA}.Release|Any CPU.Build.0 = Release|Any CPU
-		{E9C9C82F-6B7C-4BC0-BF0F-D6F05D3C9DDA}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
-		{E9C9C82F-6B7C-4BC0-BF0F-D6F05D3C9DDA}.Release|Mixed Platforms.Build.0 = Release|Any CPU
-		{E9C9C82F-6B7C-4BC0-BF0F-D6F05D3C9DDA}.Release|x86.ActiveCfg = Release|Any CPU
 		{58947E8E-F25D-413D-83B6-E9E31A45104D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{58947E8E-F25D-413D-83B6-E9E31A45104D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{58947E8E-F25D-413D-83B6-E9E31A45104D}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
@@ -83,6 +73,16 @@ Global
 		{701C48F8-2F23-4E80-979D-EE36A0B55E64}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
 		{701C48F8-2F23-4E80-979D-EE36A0B55E64}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{701C48F8-2F23-4E80-979D-EE36A0B55E64}.Release|x86.ActiveCfg = Release|Any CPU
+		{E9C9C82F-6B7C-4BC0-BF0F-D6F05D3C9DDA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E9C9C82F-6B7C-4BC0-BF0F-D6F05D3C9DDA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E9C9C82F-6B7C-4BC0-BF0F-D6F05D3C9DDA}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{E9C9C82F-6B7C-4BC0-BF0F-D6F05D3C9DDA}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{E9C9C82F-6B7C-4BC0-BF0F-D6F05D3C9DDA}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{E9C9C82F-6B7C-4BC0-BF0F-D6F05D3C9DDA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E9C9C82F-6B7C-4BC0-BF0F-D6F05D3C9DDA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E9C9C82F-6B7C-4BC0-BF0F-D6F05D3C9DDA}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{E9C9C82F-6B7C-4BC0-BF0F-D6F05D3C9DDA}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{E9C9C82F-6B7C-4BC0-BF0F-D6F05D3C9DDA}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

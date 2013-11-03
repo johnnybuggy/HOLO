@@ -8,8 +8,8 @@
     <ProjectGuid>{E9C9C82F-6B7C-4BC0-BF0F-D6F05D3C9DDA}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>HoloKernel</RootNamespace>
-    <AssemblyName>HoloKernel</AssemblyName>
+    <RootNamespace>Holo.Core</RootNamespace>
+    <AssemblyName>Holo.Core</AssemblyName>
     <TargetFrameworkVersion>v2.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
@@ -22,6 +22,7 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -38,6 +39,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AudioProcessor.cs" />
+    <Compile Include="Core.cs" />
     <Compile Include="Interfaces\IAudioProcessor.cs" />
     <Compile Include="Factory.cs" />
     <Compile Include="Helpers\AudioFileScanner.cs" />
@@ -48,9 +50,11 @@
     <Compile Include="Interfaces\INamed.cs" />
     <Compile Include="Interfaces\IResampler.cs" />
     <Compile Include="Interfaces\ISampleProcessor.cs" />
+    <Compile Include="IView.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Helpers\Resampler.cs" />
     <Compile Include="Samples.cs" />
+    <Compile Include="ViewProxy.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\HoloDB\HoloDB.csproj">

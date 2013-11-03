@@ -1,4 +1,4 @@
-﻿namespace HoloKernel
+﻿namespace Holo.Core
 {
     /// <summary>
     /// Descriptor to calculate distance between sounds.
