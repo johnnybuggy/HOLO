@@ -5,11 +5,14 @@ using System.IO;
 using System.Text;
 using System.Threading;
 using HoloDB;
+using NLog;
 
 namespace Holo.Core
 {
     public sealed class HoloCore
     {
+        private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
+
         private readonly Factory Factory;
         private ViewProxy View;
 
@@ -86,6 +89,8 @@ namespace Holo.Core
             }
             catch (Exception E)
             {
+                Logger.ErrorException("Scan error.", E);
+
                 View.ShowError(E);
             }
         }
@@ -110,6 +115,8 @@ namespace Holo.Core
             }
             catch (Exception E)
             {
+                Logger.ErrorException("RemoveItems failed.", E);
+
                 View.ShowError(E);
             }
         }

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Threading;
 using HoloDB;
+using NLog;
 
 namespace Holo.Core
 {
@@ -12,6 +13,8 @@ namespace Holo.Core
     /// </summary>
     public class AudioProcessor : IAudioProcessor
     {
+        private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
+
         protected Factory factory;
         protected Queue<Audio> sourceQueue = new Queue<Audio>();
         protected int itemsCount;
@@ -61,9 +64,10 @@ namespace Holo.Core
                 try
                 {
                     Progress(this, e);
-                }catch
+                }
+                catch (Exception E)
                 {
-                    //ignore handler exceptions
+                    Logger.InfoException("OnProgress handler exception.", E);
                 }
         }
 
@@ -110,17 +114,19 @@ namespace Holo.Core
                     try
                     {
                         processor.Process(item, info);
-                    }catch(Exception ex)
+                    }
+                    catch(Exception E)
                     {
-                        /*ignore errors of processors*/
-                        Console.WriteLine(ex.Message);
+                        Logger.WarnException("Audio processor exception.", E);
                     }
 
                 OnProgress(new ProgressChangedEventArgs(100 * (itemsCount - sourceQueue.Count) / itemsCount, null));
                 item.State = AudioState.Processed;
             }
-            catch (Exception ex)
+            catch (Exception E)
             {
+                Logger.ErrorException("Audio processing failed.", E);
+
                 item.State = AudioState.Bad;
             }
         }

@@ -2,11 +2,14 @@
 using System.Threading;
 using System.Windows.Forms;
 using Holo.Core;
+using NLog;
 
 namespace Holo.UI
 {
     static class Program
     {
+        private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
+
         private static Mutex Mutex;
 
         private static bool InstanceExists()
@@ -45,10 +48,11 @@ namespace Holo.UI
 
                 Core.SaveDatabase();
             }
-            catch (Exception ex)
+            catch (Exception E)
             {
-                // TODO: Log exception.
-                MessageBox.Show(ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                Logger.FatalException("Unhandled exception at the top level.", E);
+
+                MessageBox.Show(E.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
     }

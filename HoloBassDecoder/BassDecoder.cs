@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Runtime.InteropServices;
 using System.Text;
 using Holo.Core;
+using NLog;
 using Un4seen.Bass;
 using Un4seen.Bass.AddOn.Mix;
 
@@ -10,6 +11,8 @@ namespace HoloBassDecoder
 {
     public class BassDecoder : IAudioDecoder, IDisposable
     {
+        private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
+
         public BassDecoder()
         {
             BassNet.Registration("pavel_torgashov@mail.ru", "2X25317232238");
@@ -40,8 +43,10 @@ namespace HoloBassDecoder
                 result.Samples = new Samples() { Values = buffer, Bitrate = (int)targetBitrate };
                 return result;
             }
-            catch(Exception ex)
+            catch(Exception E)
             {
+                Logger.WarnException("Audio decoding exception.", E);
+
                 return null;
             }
             finally
@@ -81,28 +86,28 @@ namespace HoloBassDecoder
                     throw new Exception(Bass.BASS_ErrorGetCode().ToString());
                 if (BassMix.BASS_Mixer_StreamAddChannel(mixerStream, stream, BASSFlag.BASS_MIXER_FILTER))
                 {
-                    int bufferSize = samplerate*10*4; /*read 10 seconds at each iteration*/
+                    int bufferSize = samplerate * 10 * 4; /*read 10 seconds at each iteration*/
                     float[] buffer = new float[bufferSize];
                     List<float[]> chunks = new List<float[]>();
                     int size = 0;
-                    while ((float) (size)/samplerate*1000 < totalmilliseconds)
+                    while ((float)(size) / samplerate * 1000 < totalmilliseconds)
                     {
                         //get re-sampled/mono data
                         int bytesRead = Bass.BASS_ChannelGetData(mixerStream, buffer, bufferSize);
                         if (bytesRead == 0)
                             break;
-                        float[] chunk = new float[bytesRead/4]; //each float contains 4 bytes
-                        Array.Copy(buffer, chunk, bytesRead/4);
+                        float[] chunk = new float[bytesRead / 4]; //each float contains 4 bytes
+                        Array.Copy(buffer, chunk, bytesRead / 4);
                         chunks.Add(chunk);
-                        size += bytesRead/4; //size of the data
+                        size += bytesRead / 4; //size of the data
                     }
 
-                    if ((float) (size)/samplerate*1000 < (milliseconds + startmillisecond))
+                    if ((float)(size) / samplerate * 1000 < (milliseconds + startmillisecond))
                         return null; /*not enough samples to return the requested data*/
-                    int start = (int) ((float) startmillisecond*samplerate/1000);
+                    int start = (int)((float)startmillisecond * samplerate / 1000);
                     int end = (milliseconds <= 0)
                                   ? size
-                                  : (int) ((float) (startmillisecond + milliseconds)*samplerate/1000);
+                                  : (int)((float)(startmillisecond + milliseconds) * samplerate / 1000);
                     data = new float[size];
                     int index = 0;
                     /*Concatenate*/
@@ -120,8 +125,11 @@ namespace HoloBassDecoder
                     }
                 }
                 else
+                {
                     throw new Exception(Bass.BASS_ErrorGetCode().ToString());
-            }finally
+                }
+            }
+            finally
             {
                 Bass.BASS_StreamFree(stream);
                 Bass.BASS_StreamFree(mixerStream);

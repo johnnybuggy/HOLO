@@ -7,11 +7,14 @@ using Holo.Core;
 using Holo.UI.Controls;
 using HoloDB;
 using HoloProcessors;
+using NLog;
 
 namespace Holo.UI
 {
     public partial class MainForm : Form, IView
     {
+        private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
+
         private readonly HoloCore Core;
 
         private Audios ShownItems;
@@ -43,9 +46,9 @@ namespace Holo.UI
             {
                 Core.ProcessAudios(UpdateProcessingProgress);
             }
-            catch (Exception ex)
+            catch (Exception E)
             {
-                // TODO: Log exception.
+                Logger.WarnException("Audio processing exception.", E);
             }
 
             tmProcessing.Start();
@@ -209,6 +212,8 @@ namespace Holo.UI
             }
             catch (Exception E)
             {
+                Logger.ErrorException("Files processing exception.", E);
+
                 ShowError(E);
             }
         }
