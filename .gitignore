@@ -45,7 +45,6 @@ local.properties
 
 [Dd]ebug/
 [Rr]elease/
-x64/
 build/
 [Bb]in/
 [Oo]bj/
@@ -130,7 +129,7 @@ publish/
 
 # NuGet Packages Directory
 ## TODO: If you have NuGet Package Restore enabled, uncomment the next line
-#packages/
+packages/
 
 # Windows Azure Build Output
 csx

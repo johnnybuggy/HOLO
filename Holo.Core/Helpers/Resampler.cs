@@ -1,8 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 
-namespace HoloKernel
+namespace Holo.Core
 {
     public class Resampler : IResampler
     {

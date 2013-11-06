@@ -1,8 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
 
-namespace HoloKernel
+namespace Holo.Core
 {
     /// <summary>
     /// Factory of main classes of signal processing
@@ -34,5 +33,7 @@ namespace HoloKernel
         /// Enumerates processors of samples of signal
         /// </summary>
         public abstract IEnumerable<ISampleProcessor> CreateSampleProcessors();
+
+        public abstract Dictionary<int, Type> GetKnownTypes();
     }
 }

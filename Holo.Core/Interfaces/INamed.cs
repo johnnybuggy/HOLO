@@ -1,4 +1,4 @@
-namespace HoloKernel
+namespace Holo.Core
 {
     /// <summary>
     /// Item with name and description for UI

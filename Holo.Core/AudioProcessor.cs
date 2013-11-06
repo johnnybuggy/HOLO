@@ -1,12 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Text;
 using System.Threading;
-using HoloKernel;
 using HoloDB;
+using NLog;
 
-namespace HoloKernel
+namespace Holo.Core
 {
     /// <summary>
     /// Decodes audio sources, calculates chracteristics of signal.
@@ -14,6 +13,8 @@ namespace HoloKernel
     /// </summary>
     public class AudioProcessor : IAudioProcessor
     {
+        private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
+
         protected Factory factory;
         protected Queue<Audio> sourceQueue = new Queue<Audio>();
         protected int itemsCount;
@@ -63,9 +64,10 @@ namespace HoloKernel
                 try
                 {
                     Progress(this, e);
-                }catch
+                }
+                catch (Exception E)
                 {
-                    //ignore handler exceptions
+                    Logger.InfoException("OnProgress handler exception.", E);
                 }
         }
 
@@ -112,17 +114,19 @@ namespace HoloKernel
                     try
                     {
                         processor.Process(item, info);
-                    }catch(Exception ex)
+                    }
+                    catch(Exception E)
                     {
-                        /*ignore errors of processors*/
-                        Console.WriteLine(ex.Message);
+                        Logger.WarnException("Audio processor exception.", E);
                     }
 
                 OnProgress(new ProgressChangedEventArgs(100 * (itemsCount - sourceQueue.Count) / itemsCount, null));
                 item.State = AudioState.Processed;
             }
-            catch (Exception ex)
+            catch (Exception E)
             {
+                Logger.ErrorException("Audio processing failed.", E);
+
                 item.State = AudioState.Bad;
             }
         }

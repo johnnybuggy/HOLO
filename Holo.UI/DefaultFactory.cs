@@ -1,12 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
-using HoloKernel;
+using Holo.Core;
 using HoloProcessors;
 
 namespace Holo.UI
 {
     /// <summary>
-    /// Implements factory of classes of processing of signals
+    /// Implements factory of signal processing classes.
     /// </summary>
     public class DefaultFactory : Factory
     {
@@ -16,7 +16,7 @@ namespace Holo.UI
         }
 
         /// <summary>
-        /// Enumerates processors of samples of signal
+        /// Enumerates signal samples processors
         /// </summary>
         public override IEnumerable<ISampleProcessor> CreateSampleProcessors()
         {
@@ -26,15 +26,15 @@ namespace Holo.UI
             yield return new TempogramProcessor(this);
         }
 
-        public static Dictionary<int, Type> GetWellKnownTypes()
+        public override Dictionary<int, Type> GetKnownTypes()
         {
-            var res = new Dictionary<int, Type>();
+            var Result = new Dictionary<int, Type>();
 
-            res.Add(0, typeof(Envelope));
-            res.Add(1, typeof(Tempogram));
-            res.Add(2, typeof(VolumeDescriptor));
+            Result.Add(0, typeof(Envelope));
+            Result.Add(1, typeof(Tempogram));
+            Result.Add(2, typeof(VolumeDescriptor));
 
-            return res;
+            return Result;
         }
     }
 }

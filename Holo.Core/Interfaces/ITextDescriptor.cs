@@ -1,4 +1,4 @@
-﻿namespace HoloKernel
+﻿namespace Holo.Core
 {
     /// <summary>
     /// Descriptor with text 

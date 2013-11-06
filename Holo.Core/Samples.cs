@@ -1,7 +1,7 @@
 using System;
 using HoloDB;
 
-namespace HoloKernel
+namespace Holo.Core
 {
     /// <summary>
     /// Sample values of sound and his bitrate

@@ -1,9 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using HoloDB;
+﻿using HoloDB;
 
-namespace HoloKernel
+namespace Holo.Core
 {
     public interface ISampleProcessor
     {
