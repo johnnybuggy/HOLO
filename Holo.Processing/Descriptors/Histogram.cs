@@ -1,10 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
 using Holo.Core;
 using HoloDB;
 
-namespace HoloProcessors
+namespace Holo.Processing
 {
     /// <summary>
     /// Histogram

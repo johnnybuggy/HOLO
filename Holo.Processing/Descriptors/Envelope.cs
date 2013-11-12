@@ -1,11 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Text;
+﻿using System.IO;
 using Holo.Core;
 using HoloDB;
 
-namespace HoloProcessors
+namespace Holo.Processing
 {
     /// <summary>
     /// Stores envelope in packed array

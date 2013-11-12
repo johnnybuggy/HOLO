@@ -4,9 +4,9 @@ using System.ComponentModel;
 using System.Threading;
 using System.Windows.Forms;
 using Holo.Core;
+using Holo.Processing;
 using Holo.UI.Controls;
 using HoloDB;
-using HoloProcessors;
 using NLog;
 
 namespace Holo.UI

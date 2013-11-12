@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using Holo.Core;
-using HoloProcessors;
+using Holo.Processing;
 
 namespace Holo.UI
 {
@@ -20,9 +20,11 @@ namespace Holo.UI
         /// </summary>
         public override IEnumerable<ISampleProcessor> CreateSampleProcessors()
         {
-            //build envelope
+            // Annotate with SHA1 hash
+            yield return new SHA1HashProcessor();
+            // build envelope
             yield return new EnvelopeProcessor(this);
-            //build tempogram
+            // build tempogram
             yield return new TempogramProcessor(this);
         }
 
@@ -33,6 +35,7 @@ namespace Holo.UI
             Result.Add(0, typeof(Envelope));
             Result.Add(1, typeof(Tempogram));
             Result.Add(2, typeof(VolumeDescriptor));
+            Result.Add(3, typeof(SHA1HashDescriptor));
 
             return Result;
         }

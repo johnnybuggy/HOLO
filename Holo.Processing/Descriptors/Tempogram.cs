@@ -1,11 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Text;
+﻿using System.IO;
 using Holo.Core;
+using Holo.Processing.Helpers;
 using HoloDB;
 
-namespace HoloProcessors
+namespace Holo.Processing
 {
     /// <summary>
     /// Describes tempo of sound

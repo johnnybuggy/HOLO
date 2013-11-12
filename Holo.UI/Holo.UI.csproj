@@ -143,6 +143,10 @@
       <Project>{E9C9C82F-6B7C-4BC0-BF0F-D6F05D3C9DDA}</Project>
       <Name>Holo.Core</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Holo.Processing\Holo.Processing.csproj">
+      <Project>{3F1512E7-3875-4863-A41F-A2AC25E3CB4E}</Project>
+      <Name>Holo.Processing</Name>
+    </ProjectReference>
     <ProjectReference Include="..\HoloBassDecoder\HoloBassDecoder.csproj">
       <Project>{7B70E195-7999-4435-91FD-AB1D288ED885}</Project>
       <Name>HoloBassDecoder</Name>
@@ -150,10 +154,6 @@
     <ProjectReference Include="..\HoloDB\HoloDB.csproj">
       <Project>{58947E8E-F25D-413D-83B6-E9E31A45104D}</Project>
       <Name>HoloDB</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\HoloProcessors\HoloProcessors.csproj">
-      <Project>{3F1512E7-3875-4863-A41F-A2AC25E3CB4E}</Project>
-      <Name>HoloProcessors</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

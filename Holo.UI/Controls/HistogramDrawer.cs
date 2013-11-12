@@ -1,5 +1,6 @@
 ﻿using System.Drawing;
-using HoloProcessors;
+using Holo.Processing;
+using Holo.Processing.Helpers;
 
 namespace Holo.UI.Controls
 {

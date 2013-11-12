@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace HoloProcessors
+namespace Holo.Processing.Helpers
 {
     /// <summary>    
     /// Represent a class that performs real or complex valued Fast Fourier                                      

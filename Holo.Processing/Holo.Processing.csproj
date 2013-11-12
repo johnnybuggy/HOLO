@@ -8,8 +8,8 @@
     <ProjectGuid>{3F1512E7-3875-4863-A41F-A2AC25E3CB4E}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>HoloProcessors</RootNamespace>
-    <AssemblyName>HoloProcessors</AssemblyName>
+    <RootNamespace>Holo.Processing</RootNamespace>
+    <AssemblyName>Holo.Processing</AssemblyName>
     <TargetFrameworkVersion>v2.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
@@ -42,15 +42,18 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Helpers\Histogram.cs" />
+    <Compile Include="Descriptors\SHA1HashDescriptor.cs" />
+    <Compile Include="Descriptors\SHA1Hash.cs" />
+    <Compile Include="Descriptors\Histogram.cs" />
     <Compile Include="Descriptors\Envelope.cs" />
+    <Compile Include="Helpers\ModifiedFNV.cs" />
     <Compile Include="Processors\EnvelopeProcessor.cs" />
     <Compile Include="Helpers\FFT.cs" />
+    <Compile Include="Processors\SHA1HashProcessor.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Descriptors\Tempogram.cs" />
     <Compile Include="Processors\TempogramProcessor.cs" />
     <Compile Include="Descriptors\VolumeDescriptor.cs" />
-    <Compile Include="Tester.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Holo.Core\Holo.Core.csproj">
