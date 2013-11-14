@@ -12,5 +12,11 @@ namespace Holo.Processing.Search
         public bool LongRhythm;
         public bool ShortRhythm;
         public bool VolumeDistr;
+
+        public override string ToString()
+        {
+            return string.Format("Volume: {0}, Intensity: {1}, LRhythm: {2}, SRhythm: {3}", 
+                VolumeDistr, Intensity, LongRhythm, ShortRhythm);
+        }
     }
 }

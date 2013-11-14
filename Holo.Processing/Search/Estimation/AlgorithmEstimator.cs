@@ -152,13 +152,16 @@ namespace Holo.Processing.Search
             {
                 foreach (SHA1Hash Target in ManualScores[Reference].Keys)
                 {
-                    int ReferenceScore = ManualScores[Reference][Target];
+                    if (AutoScores.ContainsKey(Reference) && AutoScores[Reference].ContainsKey(Target))
+                    {
+                        int ReferenceScore = ManualScores[Reference][Target];
 
-                    int AutoScore = AutoScores[Reference][Target];
+                        int AutoScore = AutoScores[Reference][Target];
 
-                    int Error = ReferenceScore - AutoScore;
+                        int Error = ReferenceScore - AutoScore;
 
-                    Errors.Add(Error);
+                        Errors.Add(Error);
+                    }
                 }
             }
 
@@ -169,7 +172,7 @@ namespace Holo.Processing.Search
 
             EstimationResult Result = new EstimationResult()
                 {
-                    AlgorithmName = algorithm.DisplayName,
+                    AlgorithmName = algorithm.DisplayName + ". \n" + parameters,
                     Mean = Mean,
                     StandardDeviation = StandardDeviation,
                     Scores = AutoScores

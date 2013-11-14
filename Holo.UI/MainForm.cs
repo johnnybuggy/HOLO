@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Linq;
 using System.Threading;
 using System.Windows.Forms;
 using Holo.Core;
@@ -223,22 +224,16 @@ namespace Holo.UI
         {
             AlgorithmEstimator Estimator = new AlgorithmEstimator(Core, "hash.csv", "scores.csv");
 
-            List<EstimationResult> Results = new List<EstimationResult>
-                {
-                    Estimator.EstimateAlgorithm<SearchByTempoDistribution>(),
-                    Estimator.EstimateAlgorithm<SearchBySimilarity>(new SimilarityOptions()
-                                                                        {
-                                                                            AmpEnvelope = true,
-                                                                            Intensity = true,
-                                                                            LongRhythm = true,
-                                                                            ShortRhythm = false,
-                                                                            VolumeDistr = false
-                                                                        })
-                };
+            List<EstimationResult> Results = new List<EstimationResult>();
 
-            string Output = SimpleReportFormatter.FormatShort(Results);
+            Results.Add(Estimator.EstimateAlgorithm<SearchByTempoDistribution>());
 
-            MessageBox.Show(Output);
+            SimilarityOptionsVariator OptionsVariator = new SimilarityOptionsVariator();
+            Results.AddRange(OptionsVariator.GetNextOptions().Select(Estimator.EstimateAlgorithm<SearchBySimilarity>));
+
+            EstimationResultsForm ResultsForm = new EstimationResultsForm();
+            ResultsForm.SetResults(Results);
+            ResultsForm.Show();
         }
     }
 }

@@ -8,12 +8,28 @@ namespace Holo.Processing.Search
     /// </summary>
     public class EstimationResult
     {
-        public string AlgorithmName;
+        public string AlgorithmName
+        {
+            get;
+            set;
+        }
 
-        public double Mean;
+        public double Mean
+        {
+            get;
+            set;
+        }
 
-        public double StandardDeviation;
+        public double StandardDeviation
+        {
+            get;
+            set;
+        }
 
-        public Dictionary<SHA1Hash, Dictionary<SHA1Hash, int>> Scores;
+        public Dictionary<SHA1Hash, Dictionary<SHA1Hash, int>> Scores
+        {
+            get;
+            set;
+        }
     }
 }

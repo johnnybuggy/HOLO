@@ -66,6 +66,7 @@
     <Compile Include="Processors\TempogramProcessor.cs" />
     <Compile Include="Descriptors\VolumeDescriptor.cs" />
     <Compile Include="Search\AudiosExtensions.cs" />
+    <Compile Include="Search\Estimation\SimilarityOptionsVariator.cs" />
     <Compile Include="Search\Estimation\SimpleReportFormatter.cs" />
     <Compile Include="Search\SearchBySimilarity.cs" />
     <Compile Include="Search\SearchByTempoDistribution.cs" />
