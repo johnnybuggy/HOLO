@@ -112,12 +112,12 @@ namespace Holo.Processing.Search
             return 4;
         }
 
-        public EstimationResult EstimateAlgorithm<T>() where T : ISearchAlgorithm, new()
+        public EstimationResult EstimateAlgorithm<T>(object parameters = null) where T : ISearchAlgorithm, new()
         {
-            return EstimateAlgorithm(new T());
+            return EstimateAlgorithm(new T(), parameters);
         }
 
-        public EstimationResult EstimateAlgorithm(ISearchAlgorithm algorithm)
+        public EstimationResult EstimateAlgorithm(ISearchAlgorithm algorithm, object parameters = null)
         {
             if (algorithm == null)
             {
@@ -127,10 +127,11 @@ namespace Holo.Processing.Search
             Dictionary<SHA1Hash, Dictionary<SHA1Hash, int>> AutoScores = new Dictionary<SHA1Hash, Dictionary<SHA1Hash, int>>();
 
             List<Audio> Audios = Core.GetAudios().ToList();
+            List<Audio> ReferenceList = Audios.ToList();
 
-            foreach (Audio ReferenceAudio in Audios)
+            foreach (Audio ReferenceAudio in ReferenceList)
             {
-                IList<Audio> Series = Audios.Search(ReferenceAudio, algorithm)
+                IList<Audio> Series = Audios.Search(ReferenceAudio, algorithm, parameters)
                                             .Where(audio => HashMap.Contains(audio.GetHash()))
                                             .ToList();
 

@@ -226,7 +226,14 @@ namespace Holo.UI
             List<EstimationResult> Results = new List<EstimationResult>
                 {
                     Estimator.EstimateAlgorithm<SearchByTempoDistribution>(),
-                    Estimator.EstimateAlgorithm<SearchBySimilarity>()
+                    Estimator.EstimateAlgorithm<SearchBySimilarity>(new SimilarityOptions()
+                                                                        {
+                                                                            AmpEnvelope = true,
+                                                                            Intensity = true,
+                                                                            LongRhythm = true,
+                                                                            ShortRhythm = false,
+                                                                            VolumeDistr = false
+                                                                        })
                 };
 
             string Output = SimpleReportFormatter.FormatShort(Results);

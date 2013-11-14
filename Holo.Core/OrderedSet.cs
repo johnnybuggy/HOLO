@@ -50,6 +50,7 @@ namespace Holo.Core
                     return false;
                 }
 
+                Set.Add(item);
                 List.Add(item);
 
                 return true;
