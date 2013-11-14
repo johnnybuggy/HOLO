@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Holo.Core
+namespace Holo.Core.Helpers
 {
     public class Resampler : IResampler
     {

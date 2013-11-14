@@ -1,4 +1,4 @@
-﻿namespace Holo.Processing.Helpers
+﻿namespace Holo.Core.Helpers
 {
     /// <summary>
     /// http://bretm.home.comcast.net/~bretm/hash/6.html

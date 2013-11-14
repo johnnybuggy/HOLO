@@ -10,10 +10,11 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Holo.Core</RootNamespace>
     <AssemblyName>Holo.Core</AssemblyName>
-    <TargetFrameworkVersion>v2.0</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\</SolutionDir>
     <RestorePackages>true</RestorePackages>
+    <TargetFrameworkProfile>Client</TargetFrameworkProfile>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -36,8 +37,9 @@
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="NLog">
-      <HintPath>..\packages\NLog.2.1.0\lib\net20\NLog.dll</HintPath>
+    <Reference Include="NLog, Version=2.1.0.0, Culture=neutral, PublicKeyToken=5120e14c03d0593c, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\NLog.2.1.0\lib\net40\NLog.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
@@ -46,20 +48,24 @@
   <ItemGroup>
     <Compile Include="AudioProcessor.cs" />
     <Compile Include="Core.cs" />
+    <Compile Include="Helpers\ModifiedFNV.cs" />
     <Compile Include="Interfaces\IAudioProcessor.cs" />
     <Compile Include="Factory.cs" />
     <Compile Include="Helpers\AudioFileScanner.cs" />
     <Compile Include="Interfaces\IAudioDecoder.cs" />
     <Compile Include="Interfaces\ICompareDescriptor.cs" />
+    <Compile Include="Interfaces\ISearchAlgorithm.cs" />
     <Compile Include="Interfaces\ITextDescriptor.cs" />
     <Compile Include="Interfaces\IDistanceDescriptor.cs" />
     <Compile Include="Interfaces\INamed.cs" />
     <Compile Include="Interfaces\IResampler.cs" />
     <Compile Include="Interfaces\ISampleProcessor.cs" />
     <Compile Include="IView.cs" />
+    <Compile Include="OrderedSet.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Helpers\Resampler.cs" />
     <Compile Include="Samples.cs" />
+    <Compile Include="SHA1Hash.cs" />
     <Compile Include="ViewProxy.cs" />
   </ItemGroup>
   <ItemGroup>

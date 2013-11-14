@@ -5,6 +5,7 @@ using System.Threading;
 using System.Windows.Forms;
 using Holo.Core;
 using Holo.Processing;
+using Holo.Processing.Search;
 using Holo.UI.Controls;
 using HoloDB;
 using NLog;
@@ -216,6 +217,21 @@ namespace Holo.UI
 
                 ShowError(E);
             }
+        }
+
+        private void button1_Click_1(object sender, EventArgs e)
+        {
+            AlgorithmEstimator Estimator = new AlgorithmEstimator(Core, "hash.csv", "scores.csv");
+
+            List<EstimationResult> Results = new List<EstimationResult>
+                {
+                    Estimator.EstimateAlgorithm<SearchByTempoDistribution>(),
+                    Estimator.EstimateAlgorithm<SearchBySimilarity>()
+                };
+
+            string Output = SimpleReportFormatter.FormatShort(Results);
+
+            MessageBox.Show(Output);
         }
     }
 }

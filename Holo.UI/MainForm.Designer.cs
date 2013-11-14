@@ -37,6 +37,7 @@ namespace Holo.UI
             this.lbProgress = new System.Windows.Forms.ToolStripStatusLabel();
             this.pbProgress = new System.Windows.Forms.ToolStripProgressBar();
             this.pnTop = new System.Windows.Forms.Panel();
+            this.button1 = new System.Windows.Forms.Button();
             this.pictureBox2 = new System.Windows.Forms.PictureBox();
             this.tbSearch = new System.Windows.Forms.TextBox();
             this.pbSettings = new System.Windows.Forms.PictureBox();
@@ -102,6 +103,7 @@ namespace Holo.UI
             // 
             this.pnTop.BackgroundImage = global::Holo.UI.Resource.bgTop;
             this.pnTop.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.pnTop.Controls.Add(this.button1);
             this.pnTop.Controls.Add(this.pictureBox2);
             this.pnTop.Controls.Add(this.tbSearch);
             this.pnTop.Controls.Add(this.pbSettings);
@@ -113,6 +115,16 @@ namespace Holo.UI
             this.pnTop.Name = "pnTop";
             this.pnTop.Size = new System.Drawing.Size(838, 67);
             this.pnTop.TabIndex = 3;
+            // 
+            // button1
+            // 
+            this.button1.Location = new System.Drawing.Point(666, 29);
+            this.button1.Name = "button1";
+            this.button1.Size = new System.Drawing.Size(122, 32);
+            this.button1.TabIndex = 6;
+            this.button1.Text = "Estimate";
+            this.button1.UseVisualStyleBackColor = true;
+            this.button1.Click += new System.EventHandler(this.button1_Click_1);
             // 
             // pictureBox2
             // 
@@ -259,6 +271,7 @@ namespace Holo.UI
         private System.Windows.Forms.ToolStripStatusLabel lbAddedCount;
         private System.Windows.Forms.TextBox tbSearch;
         private System.Windows.Forms.PictureBox pictureBox2;
+        private System.Windows.Forms.Button button1;
 
     }
 }

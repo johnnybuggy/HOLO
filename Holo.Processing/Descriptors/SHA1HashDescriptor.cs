@@ -22,7 +22,7 @@ namespace Holo.Processing
                 throw new ArgumentNullException("audio");
             }
 
-            Hash = SHA1Hash.FromAudio(audio);
+            Hash = SHA1Hash.FromStream(audio.GetSourceStream());
         }
 
         public SHA1Hash Hash

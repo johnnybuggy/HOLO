@@ -10,8 +10,11 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Holo.Processing</RootNamespace>
     <AssemblyName>Holo.Processing</AssemblyName>
-    <TargetFrameworkVersion>v2.0</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
+    <TargetFrameworkProfile>Client</TargetFrameworkProfile>
+    <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\</SolutionDir>
+    <RestorePackages>true</RestorePackages>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -36,17 +39,25 @@
     <Reference Include="FFTW">
       <HintPath>..\Libs\FFTW\FFTW.dll</HintPath>
     </Reference>
+    <Reference Include="MathNet.Numerics">
+      <HintPath>..\packages\MathNet.Numerics.2.6.2\lib\net40\MathNet.Numerics.dll</HintPath>
+    </Reference>
+    <Reference Include="MathNet.Numerics.IO">
+      <HintPath>..\packages\MathNet.Numerics.2.6.2\lib\net40\MathNet.Numerics.IO.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
+    <Reference Include="System.Numerics" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Search\Estimation\AlgorithmEstimator.cs" />
     <Compile Include="Descriptors\SHA1HashDescriptor.cs" />
-    <Compile Include="Descriptors\SHA1Hash.cs" />
     <Compile Include="Descriptors\Histogram.cs" />
     <Compile Include="Descriptors\Envelope.cs" />
-    <Compile Include="Helpers\ModifiedFNV.cs" />
+    <Compile Include="AudioExtensions.cs" />
+    <Compile Include="Search\Estimation\EstimationResult.cs" />
     <Compile Include="Processors\EnvelopeProcessor.cs" />
     <Compile Include="Helpers\FFT.cs" />
     <Compile Include="Processors\SHA1HashProcessor.cs" />
@@ -54,6 +65,11 @@
     <Compile Include="Descriptors\Tempogram.cs" />
     <Compile Include="Processors\TempogramProcessor.cs" />
     <Compile Include="Descriptors\VolumeDescriptor.cs" />
+    <Compile Include="Search\AudiosExtensions.cs" />
+    <Compile Include="Search\Estimation\SimpleReportFormatter.cs" />
+    <Compile Include="Search\SearchBySimilarity.cs" />
+    <Compile Include="Search\SearchByTempoDistribution.cs" />
+    <Compile Include="Search\SimilarityOptions.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Holo.Core\Holo.Core.csproj">
@@ -65,7 +81,11 @@
       <Name>HoloDB</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">

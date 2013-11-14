@@ -3,7 +3,9 @@ using System.Diagnostics;
 using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Windows.Forms;
+using Holo.Core;
 using Holo.Processing;
+using Holo.Processing.Search;
 using HoloDB;
 
 namespace Holo.UI.Controls
@@ -268,24 +270,7 @@ namespace Holo.UI.Controls
                 return;
             try
             {
-                var item = items[selectedItemIndex];
-                var desc = item.GetData<Tempogram>();
-                if(desc != null)
-                foreach (var i in items)
-                {
-                    var d = i.GetData<Tempogram>();
-                    if (d == null)
-                    {
-                        i.Tag = 10;
-                        continue;
-                    }
-                    var d1 = desc.LongTempogram.Distance(d.LongTempogram);
-                    var d2 = desc.ShortTempogram.Distance(d.ShortTempogram);
-                    var d3 = Math.Abs(desc.Intensity - d.Intensity);
-                    i.Tag = d1 + d2 * 0.0003f + d3 * 0.0002f;
-                }
-
-                items.Sort((a1, a2) => a1.Tag.CompareTo(a2.Tag));
+                items.SearchBy<SearchByTempoDistribution>(selectedItemIndex);
 
                 ScrollToTopLeft();
                 selectedItemIndex = 0;
@@ -309,17 +294,21 @@ namespace Holo.UI.Controls
         {
             try
             {
-                items.Sort(
-                    (a1, a2) =>
+                items.Sort((a1, a2) =>
+                {
+                    var t1 = a1.GetData<Tempogram>();
+                    var t2 = a2.GetData<Tempogram>();
+
+                    if (t1 != null && t2 != null)
                     {
-                        var t1 = a1.GetData<Tempogram>();
-                        var t2 = a2.GetData<Tempogram>();
-                        if (t1 != null && t2 != null)
-                            return t1.Intensity.CompareTo(t2.Intensity);
-                        else
-                            return a1.ShortName.CompareTo(a2.ShortName);
+                        return t1.Intensity.CompareTo(t2.Intensity);
                     }
-                    );
+                    else
+                    {
+                        return a1.ShortName.CompareTo(a2.ShortName);
+                    }
+                });
+
                 Invalidate();
             }
             catch (Exception ex)
@@ -380,47 +369,20 @@ namespace Holo.UI.Controls
                 return;
             try
             {
-                var item = items[selectedItemIndex];
-
                 if (findSimilarPropertiesForm.ShowDialog() != DialogResult.OK)
                     return;
 
-                var cbAmpEnvelope = findSimilarPropertiesForm.cbAmpEnvelope.Checked;
-                var cbIntensity = findSimilarPropertiesForm.cbIntensity.Checked;
-                var cbLongRhythm = findSimilarPropertiesForm.cbLongRhythm.Checked;
-                var cbShortRhythm = findSimilarPropertiesForm.cbShortRhythm.Checked;
-                var cbVolumeDistr = findSimilarPropertiesForm.cbVolumeDistr.Checked;
-
-                var tempogram = item.GetData<Tempogram>();
-                var volumeDescr = item.GetData<VolumeDescriptor>();
-
-                foreach (var i in items)
-                {
-                    var distance = 0f;
-                    var d = i.GetData<Tempogram>();
-                    if (d == null || tempogram == null)
-                        distance += 1;
-                    else
+                SimilarityOptions Options = new SimilarityOptions()
                     {
-                        if (cbLongRhythm) distance += tempogram.LongTempogram.Distance(d.LongTempogram);
-                        if (cbShortRhythm) distance += tempogram.ShortTempogram.Distance(d.ShortTempogram) * 0.3f;
-                        if (cbIntensity) distance += Math.Abs(tempogram.Intensity - d.Intensity) * 0.2f;
-                    }
+                        AmpEnvelope = findSimilarPropertiesForm.cbAmpEnvelope.Checked,
+                        Intensity = findSimilarPropertiesForm.cbIntensity.Checked,
+                        LongRhythm = findSimilarPropertiesForm.cbLongRhythm.Checked,
+                        ShortRhythm = findSimilarPropertiesForm.cbShortRhythm.Checked,
+                        VolumeDistr = findSimilarPropertiesForm.cbVolumeDistr.Checked
+                    };
 
-                    if(cbVolumeDistr)
-                    {
-                        var vd = i.GetData<VolumeDescriptor>();
-                        if (vd == null || volumeDescr == null)
-                            distance += 1f;
-                        else
-                            distance += volumeDescr.Distance(vd);
-                    }
-
-                    i.Tag = distance;
-                }
-
-                items.Sort((a1, a2) => a1.Tag.CompareTo(a2.Tag));
-
+                items.SearchBy<SearchBySimilarity>(selectedItemIndex, Options);
+                
                 ScrollToTopLeft();
                 selectedItemIndex = 0;
                 Invalidate();

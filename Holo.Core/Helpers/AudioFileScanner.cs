@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Runtime.InteropServices;
 
-namespace Holo.Core
+namespace Holo.Core.Helpers
 {
     internal static class FileScanner
     {

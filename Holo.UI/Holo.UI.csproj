@@ -10,7 +10,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Holo.UI</RootNamespace>
     <AssemblyName>Holo.UI</AssemblyName>
-    <TargetFrameworkVersion>v2.0</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <PublishUrl>publish\</PublishUrl>
     <Install>true</Install>
@@ -29,6 +29,7 @@
     <BootstrapperEnabled>true</BootstrapperEnabled>
     <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\</SolutionDir>
     <RestorePackages>true</RestorePackages>
+    <TargetFrameworkProfile>Client</TargetFrameworkProfile>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -56,12 +57,14 @@
     <StartupObject />
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="NLog">
-      <HintPath>..\packages\NLog.2.1.0\lib\net20\NLog.dll</HintPath>
+    <Reference Include="NLog, Version=2.1.0.0, Culture=neutral, PublicKeyToken=5120e14c03d0593c, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\NLog.2.1.0\lib\net40\NLog.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
+    <Reference Include="System.Numerics" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
   </ItemGroup>
@@ -139,24 +142,6 @@
     <None Include="Resources\bgTop.png" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Holo.Core\Holo.Core.csproj">
-      <Project>{E9C9C82F-6B7C-4BC0-BF0F-D6F05D3C9DDA}</Project>
-      <Name>Holo.Core</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Holo.Processing\Holo.Processing.csproj">
-      <Project>{3F1512E7-3875-4863-A41F-A2AC25E3CB4E}</Project>
-      <Name>Holo.Processing</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\HoloBassDecoder\HoloBassDecoder.csproj">
-      <Project>{7B70E195-7999-4435-91FD-AB1D288ED885}</Project>
-      <Name>HoloBassDecoder</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\HoloDB\HoloDB.csproj">
-      <Project>{58947E8E-F25D-413D-83B6-E9E31A45104D}</Project>
-      <Name>HoloDB</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
     <None Include="Resources\play.png" />
   </ItemGroup>
   <ItemGroup>
@@ -205,6 +190,24 @@
       <ProductName>.NET Framework 3.5 SP1</ProductName>
       <Install>true</Install>
     </BootstrapperPackage>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Holo.Core\Holo.Core.csproj">
+      <Project>{e9c9c82f-6b7c-4bc0-bf0f-d6f05d3c9dda}</Project>
+      <Name>Holo.Core</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Holo.Processing\Holo.Processing.csproj">
+      <Project>{3f1512e7-3875-4863-a41f-a2ac25e3cb4e}</Project>
+      <Name>Holo.Processing</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\HoloBassDecoder\HoloBassDecoder.csproj">
+      <Project>{7b70e195-7999-4435-91fd-ab1d288ed885}</Project>
+      <Name>HoloBassDecoder</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\HoloDB\HoloDB.csproj">
+      <Project>{58947e8e-f25d-413d-83b6-e9e31a45104d}</Project>
+      <Name>HoloDB</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />

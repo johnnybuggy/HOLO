@@ -1,14 +1,13 @@
 ﻿using System;
 using System.IO;
 using System.Security.Cryptography;
-using Holo.Processing.Helpers;
-using HoloDB;
+using Holo.Core.Helpers;
 
-namespace Holo.Processing
+namespace Holo.Core
 {
     /// <summary>
-    /// Represents a SHA1 hash value for the given <see cref="Audio"/> file.
-    /// It can be used as key in dicionaries and sets since it overrides <see cref="Object.Equals(object)"/> 
+    /// Represents a SHA1 hash value for the given stream.
+    /// It can be used as a key in dicionaries and sets since it overrides <see cref="Object.Equals(object)"/> 
     /// and <see cref="Object.GetHashCode"/>.
     /// </summary>
     public class SHA1Hash : IEquatable<SHA1Hash>
@@ -64,14 +63,14 @@ namespace Holo.Processing
             return new SHA1Hash(Bytes);
         }
 
-        public static SHA1Hash FromAudio(Audio audio)
+        public static SHA1Hash FromStream(Stream stream)
         {
-            if (audio == null)
+            if (stream == null)
             {
-                throw new ArgumentNullException("audio");
+                throw new ArgumentNullException("stream");
             }
 
-            using (Stream FileStream = audio.GetSourceStream())
+            using (Stream FileStream = stream)
             {
                 byte[] HashValue = SHA1.Create().ComputeHash(FileStream);
                 
