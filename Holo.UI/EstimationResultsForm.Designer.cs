@@ -46,14 +46,14 @@
             this.dataGridView1.Name = "dataGridView1";
             this.dataGridView1.ReadOnly = true;
             this.dataGridView1.RowHeadersVisible = false;
-            this.dataGridView1.Size = new System.Drawing.Size(855, 417);
+            this.dataGridView1.Size = new System.Drawing.Size(1170, 516);
             this.dataGridView1.TabIndex = 0;
             // 
             // EstimationResultsForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(857, 419);
+            this.ClientSize = new System.Drawing.Size(1172, 518);
             this.Controls.Add(this.dataGridView1);
             this.Name = "EstimationResultsForm";
             this.Text = "Estimation Results";

@@ -226,6 +226,7 @@ namespace Holo.UI
 
             List<EstimationResult> Results = new List<EstimationResult>();
 
+            Results.Add(Estimator.EstimateAlgorithm<SearchByRandom>());
             Results.Add(Estimator.EstimateAlgorithm<SearchByTempoDistribution>());
 
             SimilarityOptionsVariator OptionsVariator = new SimilarityOptionsVariator();

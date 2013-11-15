@@ -68,6 +68,7 @@
     <Compile Include="Search\AudiosExtensions.cs" />
     <Compile Include="Search\Estimation\SimilarityOptionsVariator.cs" />
     <Compile Include="Search\Estimation\SimpleReportFormatter.cs" />
+    <Compile Include="Search\SearchByRandom.cs" />
     <Compile Include="Search\SearchBySimilarity.cs" />
     <Compile Include="Search\SearchByTempoDistribution.cs" />
     <Compile Include="Search\SimilarityOptions.cs" />

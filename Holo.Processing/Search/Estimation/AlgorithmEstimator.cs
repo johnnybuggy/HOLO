@@ -81,7 +81,10 @@ namespace Holo.Processing.Search
                     Result.Add(Hash1, new Dictionary<SHA1Hash, int>());
                 }
 
-                Result[Hash1].Add(Hash2, Score);
+                if (!Result[Hash1].ContainsKey(Hash2))
+                {
+                    Result[Hash1].Add(Hash2, Score);
+                }
             }
 
             return Result;
@@ -147,6 +150,8 @@ namespace Holo.Processing.Search
             }
 
             List<double> Errors = new List<double>();
+            List<double> ManualScoresList = new List<double>();
+            List<double> ReducedAutoScoresList = new List<double>();
 
             foreach (SHA1Hash Reference in ManualScores.Keys)
             {
@@ -161,20 +166,26 @@ namespace Holo.Processing.Search
                         int Error = ReferenceScore - AutoScore;
 
                         Errors.Add(Error);
+                        ManualScoresList.Add(ReferenceScore);
+                        ReducedAutoScoresList.Add(AutoScore);
                     }
                 }
             }
 
-
             double Mean = Errors.Mean();
 
             double StandardDeviation = Errors.StandardDeviation();
+
+            double Covariance = ManualScoresList.Covariance(ReducedAutoScoresList);
+            double PearsonCoeff = Correlation.Pearson(ManualScoresList, ReducedAutoScoresList);
 
             EstimationResult Result = new EstimationResult()
                 {
                     AlgorithmName = algorithm.DisplayName + ". \n" + parameters,
                     Mean = Mean,
                     StandardDeviation = StandardDeviation,
+                    Covariance = Covariance,
+                    PearsonCoeff = PearsonCoeff,
                     Scores = AutoScores
                 };
 

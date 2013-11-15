@@ -14,6 +14,12 @@ namespace Holo.Processing.Search
             set;
         }
 
+        public double PearsonCoeff
+        {
+            get;
+            set;
+        }
+
         public double Mean
         {
             get;
@@ -21,6 +27,12 @@ namespace Holo.Processing.Search
         }
 
         public double StandardDeviation
+        {
+            get;
+            set;
+        }
+
+        public double Covariance
         {
             get;
             set;
