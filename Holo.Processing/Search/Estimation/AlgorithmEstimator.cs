@@ -181,7 +181,8 @@ namespace Holo.Processing.Search
 
             EstimationResult Result = new EstimationResult()
                 {
-                    AlgorithmName = algorithm.DisplayName + ". \n" + parameters,
+                    AlgorithmName = algorithm.DisplayName,
+                    Parameters = Convert.ToString(parameters),
                     Mean = Mean,
                     StandardDeviation = StandardDeviation,
                     Covariance = Covariance,

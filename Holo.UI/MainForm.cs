@@ -220,7 +220,7 @@ namespace Holo.UI
             }
         }
 
-        private void button1_Click_1(object sender, EventArgs e)
+        private void estimateAlgorithmsToolStripMenuItem_Click(object sender, EventArgs e)
         {
             AlgorithmEstimator Estimator = new AlgorithmEstimator(Core, "hash.csv", "scores.csv");
 

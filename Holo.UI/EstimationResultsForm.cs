@@ -22,6 +22,8 @@ namespace Holo.UI
         public void SetResults(IList<EstimationResult> results)
         {
             dataGridView1.DataSource = new SortableBindingList<EstimationResult>(results);
+
+            dataGridView1.Sort(dataGridView1.Columns[2], ListSortDirection.Descending);
         }
     }
 }

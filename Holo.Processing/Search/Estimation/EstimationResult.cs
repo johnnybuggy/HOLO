@@ -14,6 +14,12 @@ namespace Holo.Processing.Search
             set;
         }
 
+        public string Parameters
+        {
+            get;
+            set;
+        }
+
         public double PearsonCoeff
         {
             get;
