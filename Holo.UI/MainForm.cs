@@ -222,19 +222,28 @@ namespace Holo.UI
 
         private void estimateAlgorithmsToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            AlgorithmEstimator Estimator = new AlgorithmEstimator(Core, "hash.csv", "scores.csv");
+            try
+            {
+                AlgorithmEstimator Estimator = new AlgorithmEstimator(Core, "hash.csv", "scores.csv");
 
-            List<EstimationResult> Results = new List<EstimationResult>();
+                List<EstimationResult> Results = new List<EstimationResult>();
 
-            Results.Add(Estimator.EstimateAlgorithm<SearchByRandom>());
-            Results.Add(Estimator.EstimateAlgorithm<SearchByTempoDistribution>());
+                Results.Add(Estimator.EstimateAlgorithm<SearchByRandom>());
+                Results.Add(Estimator.EstimateAlgorithm<SearchByTempoDistribution>());
 
-            SimilarityOptionsVariator OptionsVariator = new SimilarityOptionsVariator();
-            Results.AddRange(OptionsVariator.GetNextOptions().Select(Estimator.EstimateAlgorithm<SearchBySimilarity>));
+                SimilarityOptionsVariator OptionsVariator = new SimilarityOptionsVariator();
+                Results.AddRange(OptionsVariator.GetNextOptions().Select(Estimator.EstimateAlgorithm<SearchBySimilarity>));
 
-            EstimationResultsForm ResultsForm = new EstimationResultsForm();
-            ResultsForm.SetResults(Results);
-            ResultsForm.Show();
+                EstimationResultsForm ResultsForm = new EstimationResultsForm();
+                ResultsForm.SetResults(Results);
+                ResultsForm.Show();
+            }
+            catch (Exception E)
+            {
+                Logger.InfoException("Estimation failed.", E);
+
+                ShowError(E);
+            }
         }
     }
 }
